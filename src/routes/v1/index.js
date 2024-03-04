@@ -1,6 +1,7 @@
 
 const express = require("express");
 const authRoutes = require("./auth.route");
+const categoryRoutes = require("./categories.route");
 const HttpStatusCode = require("../../utilities/constants");
 
 
@@ -15,5 +16,6 @@ router.get("/status", (req, res) =>
 
 /** Auth APIs */
 router.use("/auth", authRoutes);
+router.use("/category", categoryRoutes);
 
 module.exports = router;
