@@ -1,0 +1,83 @@
+CREATE USER 'system'@'localhost' IDENTIFIED VIA mysql_native_password USING '***';GRANT ALL PRIVILEGES ON *.* TO 'system'@'localhost' REQUIRE NONE WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
+
+CREATE TABLE `ocl_app_bar_v1`.`users` (`Id` INT NOT NULL AUTO_INCREMENT COMMENT 'Id user' , `UserName` VARCHAR(250) NOT NULL , `password` VARCHAR(250) NOT NULL , `DisplayName` VARCHAR(250) NOT NULL , `avatar` VARCHAR(10000) NULL , `IsActive` SMALLINT NOT NULL , `VerifyToken` VARCHAR(250) NOT NULL , `CreatedAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `UpdatedAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AUTO_INCREMENT , PRIMARY KEY (`Id`)) ENGINE = InnoDB;
+
+CREATE TABLE `ocl_app_bar_v1`.`users`(
+    `Id` INT NOT NULL AUTO_INCREMENT COMMENT 'Id user',
+    `UserName` VARCHAR(250) NOT NULL,
+    `Password` VARCHAR(250) NOT NULL,
+    `DisplayName` VARCHAR(250) NOT NULL,
+    `Avatar` VARCHAR(10000) NULL,
+    `IsActive` SMALLINT NOT NULL,
+    `VerifyToken` VARCHAR(250) NOT NULL,
+    `CreatedAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `UpdatedAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(`Id`)
+) ENGINE = InnoDB;
+
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Feb 27, 2024 at 07:02 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.0.30
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `ocl_app_bar_v1`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `Id` int(11) NOT NULL COMMENT 'Id user',
+  `UserName` varchar(250) NOT NULL,
+  `Password` varchar(250) NOT NULL,
+  `DisplayName` varchar(250) NOT NULL,
+  `Avatar` varchar(10000) DEFAULT NULL,
+  `IsActive` smallint(6) NOT NULL,
+  `VerifyToken` varchar(250) NOT NULL,
+  `CreatedAt` datetime NOT NULL DEFAULT current_timestamp(),
+  `UpdatedAt` datetime NOT NULL DEFAULT current_timestamp(),
+  `Email` varchar(250) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`Id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id user';
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

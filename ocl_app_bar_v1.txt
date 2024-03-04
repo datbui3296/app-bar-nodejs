@@ -1,0 +1,225 @@
+
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+CREATE TABLE `article` (
+  `Id` int(11) NOT NULL,
+  `Title` varchar(250) NOT NULL,
+  `SubTitle` varchar(250) DEFAULT NULL,
+  `SubContent` varchar(250) DEFAULT NULL,
+  `Content` varchar(250) NOT NULL,
+  `CreatedBy` varchar(50) NOT NULL,
+  `Created` datetime NOT NULL DEFAULT current_timestamp(),
+  `UpdatedBy` varchar(50) NOT NULL,
+  `Updated` datetime NOT NULL DEFAULT current_timestamp(),
+  `Status` varchar(6) NOT NULL DEFAULT 'ACTIVE' COMMENT 'ACTIVE,BLOCK',
+  `OrderBy` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+CREATE TABLE `booking` (
+  `Id` int(11) NOT NULL,
+  `NotifyId` int(11) NOT NULL,
+  `SuKien` int(11) NOT NULL,
+  `BookDate` datetime NOT NULL DEFAULT current_timestamp(),
+  `Quantity` int(250) NOT NULL,
+  `CreatedBy` varchar(50) DEFAULT NULL,
+  `Created` datetime NOT NULL DEFAULT current_timestamp(),
+  `UpdatedBy` varchar(50) DEFAULT NULL,
+  `Updated` datetime NOT NULL DEFAULT current_timestamp(),
+  `Status` varchar(15) NOT NULL DEFAULT 'ACTIVE' COMMENT 'ACTIVE,INACTIVE'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+CREATE TABLE `category` (
+  `Id` int(11) NOT NULL,
+  `Name` varchar(250) NOT NULL,
+  `Description` varchar(250) NOT NULL,
+  `ParentId` varchar(50) NOT NULL,
+  `OrderBy` varchar(50) NOT NULL DEFAULT '',
+  `IsActive` smallint(6) NOT NULL DEFAULT 0,
+  `CreatedBy` varchar(50) DEFAULT NULL,
+  `Created` datetime NOT NULL DEFAULT current_timestamp(),
+  `UpdatedBy` varchar(50) NOT NULL,
+  `Updated` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+CREATE TABLE `notifysendplan` (
+  `Id` int(11) NOT NULL,
+  `NotifyTempalteId` int(11) NOT NULL,
+  `TimeAtSend` datetime NOT NULL,
+  `SendedBy` varchar(50) NOT NULL,
+  `IsSend` smallint(6) NOT NULL DEFAULT 0,
+  `Sended` varchar(50) NOT NULL,
+  `Receive` varchar(1500) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+CREATE TABLE `notifytempalte` (
+  `Id` int(11) NOT NULL,
+  `Name` varchar(250) NOT NULL,
+  `Content` varchar(1500) NOT NULL,
+  `CreatedBy` varchar(50) DEFAULT NULL,
+  `Created` datetime NOT NULL DEFAULT current_timestamp(),
+  `UpdatedBy` varchar(50) NOT NULL,
+  `Updated` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+CREATE TABLE `userinvoice` (
+  `Id` int(11) NOT NULL,
+  `Total` varchar(250) NOT NULL,
+  `Status` int(4) NOT NULL DEFAULT 1,
+  `IsPaided` smallint(6) NOT NULL DEFAULT 0,
+  `Paidate` int(250) NOT NULL,
+  `PaidBy` int(250) NOT NULL,
+  `CreatedBy` varchar(250) DEFAULT NULL,
+  `Created` datetime NOT NULL DEFAULT current_timestamp(),
+  `UpdatedBy` varchar(250) NOT NULL,
+  `Updated` varchar(250) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+CREATE TABLE `usernotify` (
+  `Id` int(11) NOT NULL,
+  `Title` varchar(250) NOT NULL,
+  `Content` varchar(250) NOT NULL,
+  `ArticleId` int(11) NOT NULL,
+  `SendedBy` varchar(250) NOT NULL,
+  `Sended` varchar(250) NOT NULL,
+  `IsRead` smallint(6) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE `users` (
+  `Id` int(11) NOT NULL COMMENT 'Id user',
+  `UserName` varchar(250) NOT NULL,
+  `Password` varchar(250) NOT NULL,
+  `DisplayName` varchar(250) NOT NULL,
+  `Avatar` varchar(10000) DEFAULT NULL,
+  `Email` varchar(250) DEFAULT NULL,
+  `IsActive` smallint(6) NOT NULL,
+  `VerifyToken` varchar(250) NOT NULL,
+  `Point` int(50) DEFAULT NULL,
+  `Level` int(10) DEFAULT NULL,
+  `TotalAmount` int(250) DEFAULT NULL,
+  `CreatedAt` datetime NOT NULL DEFAULT current_timestamp(),
+  `UpdatedAt` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+
+INSERT INTO `users` (`Id`, `UserName`, `Password`, `DisplayName`, `Avatar`, `Email`, `IsActive`, `VerifyToken`, `Point`, `Level`, `TotalAmount`, `CreatedAt`, `UpdatedAt`) VALUES
+(1, 'daibc345', '$2a$10$ZYDlboO.CNaWmGfeurbGy.qW3MCs7dFIDVThy43Q8nA5NYHzJWk5u', 'DAIBC12345', NULL, NULL, 0, '4c8f94b3-6d53-45a2-aee0-2d52746d6756', NULL, NULL, NULL, '2024-02-28 22:47:24', '2024-02-28 22:47:24'),
+(2, 'daibc3456', '$2a$10$u5.v9nAZ47H/sog5KELG5ucCjrGbkAToNPNU7xhYrHdULmWBMQ3Yu', 'DAIBC12345', NULL, NULL, 0, '2009c6c7-8622-430c-a6f6-4e5f5eb93e52', NULL, NULL, NULL, '2024-02-29 00:27:47', '2024-02-29 00:27:47');
+
+
+
+CREATE TABLE `usertoken` (
+  `Id` int(11) NOT NULL,
+  `UserId` int(11) NOT NULL,
+  `Token` varchar(500) NOT NULL,
+  `CreatedAt` datetime NOT NULL DEFAULT current_timestamp(),
+  `UpdatedAt` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `usertoken` (`Id`, `UserId`, `Token`, `CreatedAt`, `UpdatedAt`) VALUES
+(45, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6MSwiRW1haWwiOiJkYWliYzM0NUBnbWFpbC5jb20iLCJVc2VyTmFtZSI6ImRhaWJjMzQ1IiwiaWF0IjoxNzA5Mjg2NzkyLCJleHAiOjE3MTA1ODI3OTJ9.72tVn9Ykt9biBfmkZ3A6vu5dN5C0ZCUP0x1HEfXPWl4', '2024-03-01 16:53:12', '2024-03-01 16:53:12');
+
+
+ALTER TABLE `article`
+  ADD PRIMARY KEY (`Id`);
+
+
+ALTER TABLE `booking`
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `NotifyId` (`NotifyId`);
+
+
+ALTER TABLE `category`
+  ADD PRIMARY KEY (`Id`);
+
+
+ALTER TABLE `notifysendplan`
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `NotifyTempalteId` (`NotifyTempalteId`);
+
+
+ALTER TABLE `notifytempalte`
+  ADD PRIMARY KEY (`Id`);
+
+
+ALTER TABLE `userinvoice`
+  ADD PRIMARY KEY (`Id`);
+
+
+ALTER TABLE `usernotify`
+  ADD PRIMARY KEY (`Id`);
+
+
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`Id`);
+
+
+ALTER TABLE `usertoken`
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `UserId` (`UserId`);
+
+
+ALTER TABLE `article`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `booking`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `category`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `notifysendplan`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `notifytempalte`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `userinvoice`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `usernotify`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `users`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id user', AUTO_INCREMENT=3;
+
+ALTER TABLE `usertoken`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+
+
+ALTER TABLE `booking`
+  ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`NotifyId`) REFERENCES `usernotify` (`Id`);
+
+
+ALTER TABLE `notifysendplan`
+  ADD CONSTRAINT `notifysendplan_ibfk_1` FOREIGN KEY (`NotifyTempalteId`) REFERENCES `notifytempalte` (`Id`);
+
+
+ALTER TABLE `usertoken`
+  ADD CONSTRAINT `usertoken_ibfk_1` FOREIGN KEY (`UserId`) REFERENCES `users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+
