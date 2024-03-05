@@ -8,7 +8,8 @@ const env  = require("../config/environtment");
     NOT_FOUND: 404,
     INTERNAL_SERVER: 500,
     EXPIRED: 410,
-    REFRESH_EXPIRED: 411
+    REFRESH_EXPIRED: 411,
+    INVALID_IMAGE: 422
 
 }
 

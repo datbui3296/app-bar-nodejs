@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { corsOptions } = require("./config/cors");
+const FileUpload = require("express-fileupload") ;
 // import { connectDB } from '*/config/mongodb'
 const connectDB = require("./config/mysqldb");
 const { env } = require("./config/environtment");
@@ -19,6 +20,8 @@ const bootServer = async () => {
   // Enable req.body data
   app.use(bodyParser.json());
   app.use(express.json());
+  app.use(FileUpload());
+  app.use(express.static("uploads"));
 
   // Use APIs v1
   app.use("/api/v1", apiV1);

@@ -26,16 +26,15 @@ const create = async (data, tableName) =>  {
       console.error("An error occurred:", error.message);
     }
   }
-  const update = async (data,tableName) => {
+  const update = async (data,id,tableName) => {
     try {
-      let id = data.id;
-      delete data["id"];
       const setClause = Object.keys(data)
         .map((key) => `${key} = ?`)
         .join(", ");
       const values = Object.values(data);
       const sql = `UPDATE ${tableName} SET ${setClause} WHERE id = ?`;
-      await database.executeTransaction(sql, [...values, id]);
+      let result = await database.executeTransaction(sql, [...values, id]);
+      return result
     } catch (error) {
       console.error("An error occurred:", error.message);
     }
@@ -43,7 +42,8 @@ const create = async (data, tableName) =>  {
   const deleteData =  async (id,tableName) => {
     try {
       const sql = `DELETE FROM ${tableName} WHERE id = ?`;
-      await database.excuteQuery(sql, [id]);
+      let result = await database.excuteQuery(sql, [id]);
+      return result
     } catch (error) {
       console.error("An error occurred:", error.message);
     }
@@ -58,14 +58,14 @@ const create = async (data, tableName) =>  {
       console.error("An error occurred:", error.message);
     }
   }
-  const getAllWithPagination=  async (ge, pageSize,tableName) => {
+  const getAllWithPagination=  async (page,pageSize,tableName) => {
     try {
       const offset = (page - 1) * pageSize;
       const countSql = `SELECT count(*) as count FROM ${tableName}`;
       let resultCount = await database.excuteQuery(countSql);
       let count = resultCount[0]?.count;
       let objectPage = { page, pageSize, count };
-      const sql = `SELECT * FROM ${this.tableName} LIMIT ?, ?`;
+      const sql = `SELECT * FROM ${tableName} LIMIT ?, ?`;
       const values = [offset, pageSize];
       const result = await database.excuteQuery(sql, values);
       return { result, ...objectPage };

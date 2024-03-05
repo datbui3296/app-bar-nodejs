@@ -3,6 +3,8 @@ const { HttpStatusCode } = require("../../src/utilities/constants");
 const AuthService = require("../../src/services/auth.service");
 const AuthModel = require("../models/user.model");
 const ms = require("ms");
+const path = require("path")
+const fs = require("fs")
 
 const register = async (req, res) => {
     try {
@@ -14,13 +16,30 @@ const register = async (req, res) => {
         if (checkEmail.length > 0) {
             return res.status(HttpStatusCode.OK).json({ stt: false, msg: 'Email already in use' })
         }
-        const result = await AuthService.register(req.body)
-        //result.password = null
-        res.status(HttpStatusCode.OK).json({
-            stt: true,
-            msg: 'Account created successfully! Please check your email and verify your account before sign-in!',
-            data: result
+        // Get file upload file image 
+        if (req.files == null) return res.status(HttpStatusCode.BAD_REQUEST).json({ message: `No File Uploaded` });
+        const file = req.files.file;
+        const fileSize = file?.data?.length;
+        const ext = path.extname(file.name);
+        const fileName = file.md5 + ext;
+        const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+        const allowedType = ['.png', '.jpg', '.jpeg'];
+        if (!allowedType.includes(ext.toLowerCase())) return res.status(HttpStatusCode.INVALID_IMAGE).json({ mesage: "Invalid Images" });
+        if (fileSize > 5000000) return res.status(HttpStatusCode.INVALID_IMAGE).json({ mesage: "Image must be less than 5 MB" });
+        file.mv(`./src/uploads/${fileName}`, async (err) => {
+            if (err) return res.status(HttpStatusCode.INTERNAL_SERVER).json({ msg: err.message });
+            try {
+                const result = await AuthService.register({ Avatar: url, ...req.body })
+                res.status(HttpStatusCode.OK).json({
+                    stt: true,
+                    msg: 'Account created successfully! Please check your email and verify your account before sign-in!',
+                    data: result
+                })
+            } catch (error) {
+                console.log(error.message);
+            }
         })
+
     } catch (error) {
         res.status(HttpStatusCode.INTERNAL_SERVER).json({
             errors: error.message
@@ -79,9 +98,9 @@ const refreshToken = async (req, res) => {
     try {
         const result = await AuthService.refreshToken(req, res)
         if (result.status == HttpStatusCode.NOT_FOUND) {
-            return res.status(HttpStatusCode.NOT_FOUND).json(result )
+            return res.status(HttpStatusCode.NOT_FOUND).json(result)
         } else if (result.status == HttpStatusCode.EXPIRED) {
-            return res.status(HttpStatusCode.REFRESH_EXPIRED).json( result )
+            return res.status(HttpStatusCode.REFRESH_EXPIRED).json(result)
         }
 
         // xử lý cookie ở đây
