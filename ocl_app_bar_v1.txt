@@ -1,8 +1,8 @@
 
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
+
 
 CREATE TABLE `article` (
   `Id` int(11) NOT NULL,
@@ -34,7 +34,6 @@ CREATE TABLE `booking` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
-
 CREATE TABLE `category` (
   `Id` int(11) NOT NULL,
   `Name` varchar(250) NOT NULL,
@@ -47,6 +46,12 @@ CREATE TABLE `category` (
   `UpdatedBy` varchar(50) NOT NULL,
   `Updated` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+INSERT INTO `category` (`Id`, `Name`, `Description`, `ParentId`, `OrderBy`, `IsActive`, `CreatedBy`, `Created`, `UpdatedBy`, `Updated`) VALUES
+(5, 'Category 4', 'Category 1', 'ParentId', 'daibc1', 0, 'daibc5135', '2024-03-06 03:00:07', 'daibc5135', '2024-03-06 03:00:07'),
+(6, 'Category 5', 'Category 1', 'ParentId', 'daibc1', 0, 'daibc5135', '2024-03-06 03:00:58', 'daibc5135', '2024-03-06 03:00:58');
 
 
 
@@ -100,6 +105,7 @@ CREATE TABLE `usernotify` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+
 CREATE TABLE `users` (
   `Id` int(11) NOT NULL COMMENT 'Id user',
   `UserName` varchar(250) NOT NULL,
@@ -119,9 +125,9 @@ CREATE TABLE `users` (
 
 
 INSERT INTO `users` (`Id`, `UserName`, `Password`, `DisplayName`, `Avatar`, `Email`, `IsActive`, `VerifyToken`, `Point`, `Level`, `TotalAmount`, `CreatedAt`, `UpdatedAt`) VALUES
-(1, 'daibc345', '$2a$10$ZYDlboO.CNaWmGfeurbGy.qW3MCs7dFIDVThy43Q8nA5NYHzJWk5u', 'DAIBC12345', NULL, NULL, 0, '4c8f94b3-6d53-45a2-aee0-2d52746d6756', NULL, NULL, NULL, '2024-02-28 22:47:24', '2024-02-28 22:47:24'),
-(2, 'daibc3456', '$2a$10$u5.v9nAZ47H/sog5KELG5ucCjrGbkAToNPNU7xhYrHdULmWBMQ3Yu', 'DAIBC12345', NULL, NULL, 0, '2009c6c7-8622-430c-a6f6-4e5f5eb93e52', NULL, NULL, NULL, '2024-02-29 00:27:47', '2024-02-29 00:27:47');
-
+(9, 'daibc5135', '$2a$10$kC7lFbkA0nkRLZ9Di9qhcePowiAj045CkY02uhBnRJSn3qHqhvQWa', 'daibco', 'http://localhost:3000/images/665fdfff72e08d31c2444ad00a0040e9.jpg', 'dai12345@gmail.com', 0, 'cd37f11f-3bb5-45fa-8d4f-b455d0c979ee', NULL, NULL, NULL, '2024-03-06 00:21:46', '2024-03-06 00:21:46'),
+(10, 'daibc51356', '$2a$10$EqiAzhyroui44he7BPvQTOAPLajmGGIrm9ZTED0fxjo7BxN07/7Bi', 'daibco', 'http://localhost:3000/images/665fdfff72e08d31c2444ad00a0040e9.jpg', 'dai123456@gmail.com', 0, '20d6fc02-9ddd-4cf9-8e9e-19775b4e6f2e', NULL, NULL, NULL, '2024-03-06 00:23:30', '2024-03-06 00:23:30'),
+(11, 'daibc5', '$2a$10$/4lZh/nxyRFyNk7JMePrgOBY21gZJQ4H9edeQXTfNmIn6zulI4bpq', 'daibco', 'http://localhost:3000/images/f716f24124d69ad185e9d17584a281aa.png', 'dai234@gmail.com', 0, 'e00ac106-4c25-48ec-a5aa-357bab162831', NULL, NULL, NULL, '2024-03-06 00:24:24', '2024-03-06 00:24:24');
 
 
 CREATE TABLE `usertoken` (
@@ -132,13 +138,9 @@ CREATE TABLE `usertoken` (
   `UpdatedAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO `usertoken` (`Id`, `UserId`, `Token`, `CreatedAt`, `UpdatedAt`) VALUES
-(45, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6MSwiRW1haWwiOiJkYWliYzM0NUBnbWFpbC5jb20iLCJVc2VyTmFtZSI6ImRhaWJjMzQ1IiwiaWF0IjoxNzA5Mjg2NzkyLCJleHAiOjE3MTA1ODI3OTJ9.72tVn9Ykt9biBfmkZ3A6vu5dN5C0ZCUP0x1HEfXPWl4', '2024-03-01 16:53:12', '2024-03-01 16:53:12');
-
 
 ALTER TABLE `article`
   ADD PRIMARY KEY (`Id`);
-
 
 ALTER TABLE `booking`
   ADD PRIMARY KEY (`Id`),
@@ -153,10 +155,8 @@ ALTER TABLE `notifysendplan`
   ADD PRIMARY KEY (`Id`),
   ADD KEY `NotifyTempalteId` (`NotifyTempalteId`);
 
-
 ALTER TABLE `notifytempalte`
   ADD PRIMARY KEY (`Id`);
-
 
 ALTER TABLE `userinvoice`
   ADD PRIMARY KEY (`Id`);
@@ -182,9 +182,8 @@ ALTER TABLE `article`
 ALTER TABLE `booking`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
-
 ALTER TABLE `category`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 
 ALTER TABLE `notifysendplan`
@@ -204,7 +203,8 @@ ALTER TABLE `usernotify`
 
 
 ALTER TABLE `users`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id user', AUTO_INCREMENT=3;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id user', AUTO_INCREMENT=12;
+
 
 ALTER TABLE `usertoken`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
@@ -220,6 +220,3 @@ ALTER TABLE `notifysendplan`
 
 ALTER TABLE `usertoken`
   ADD CONSTRAINT `usertoken_ibfk_1` FOREIGN KEY (`UserId`) REFERENCES `users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
-COMMIT;
-
-
