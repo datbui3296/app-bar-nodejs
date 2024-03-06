@@ -21,7 +21,7 @@ const bootServer = async () => {
   app.use(bodyParser.json());
   app.use(express.json());
   app.use(FileUpload());
-  app.use(express.static("uploads"));
+  app.use('/uploads',express.static("uploads"));
 
   // Use APIs v1
   app.use("/api/v1", apiV1);
