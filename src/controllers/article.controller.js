@@ -66,11 +66,25 @@ const getArticleById = async (req, res) => {
     }
 }
 
+const getAllArticle = async (req, res) => {
+    try {
+        const result = await articleService.getAllArticle(req, res);
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ data: result?.data })
+
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            message: error.message
+        })
+
+    }
+}
+
 module.exports = {
     createArticle,
     updateArticle,
     deleteArticle,
     getArticleById,
-    getArticles
+    getArticles,
+    getAllArticle
 
 }

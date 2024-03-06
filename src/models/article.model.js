@@ -59,6 +59,15 @@ const getArticleByName = async (title) => {
     }
 }
 
+const getAllArticle = async () => {
+    try {
+        const result = await baseModel.getAll(tableArticleName)
+        return result;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 
 module.exports = {
@@ -67,5 +76,6 @@ module.exports = {
     deleteArticle,
     getArticles,
     getArticleById,
-    getArticleByName
+    getArticleByName,
+    getAllArticle
 }

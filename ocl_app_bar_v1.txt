@@ -1,8 +1,31 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th3 06, 2024 lúc 07:29 PM
+-- Phiên bản máy phục vụ: 10.4.32-MariaDB
+-- Phiên bản PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Cơ sở dữ liệu: `ocl_app_bar_v1`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `article`
+--
 
 CREATE TABLE `article` (
   `Id` int(11) NOT NULL,
@@ -17,6 +40,12 @@ CREATE TABLE `article` (
   `Status` varchar(6) NOT NULL DEFAULT 'ACTIVE' COMMENT 'ACTIVE,BLOCK',
   `OrderBy` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+INSERT INTO `article` (`Id`, `Title`, `SubTitle`, `SubContent`, `Content`, `CreatedBy`, `Created`, `UpdatedBy`, `Updated`, `Status`, `OrderBy`) VALUES
+(2, 'Title 12', 'SubTitle', 'SubContent', 'Content', 'daibc5135', '2024-03-06 23:36:01', 'daibc5135', '2024-03-06 23:36:01', 'ACTIVE', ''),
+(3, 'Title 123', 'SubTitle', 'SubContent', 'Content', 'daibc5135', '2024-03-06 23:36:11', 'daibc5135', '2024-03-06 23:36:11', 'ACTIVE', ''),
+(4, 'Title  2', 'SubTitle', 'SubContent', 'Content', 'daibc5135', '2024-03-06 23:36:20', 'daibc5135', '2024-03-06 23:36:20', 'ACTIVE', '');
 
 
 
@@ -34,6 +63,7 @@ CREATE TABLE `booking` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+
 CREATE TABLE `category` (
   `Id` int(11) NOT NULL,
   `Name` varchar(250) NOT NULL,
@@ -47,12 +77,9 @@ CREATE TABLE `category` (
   `Updated` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
-
 INSERT INTO `category` (`Id`, `Name`, `Description`, `ParentId`, `OrderBy`, `IsActive`, `CreatedBy`, `Created`, `UpdatedBy`, `Updated`) VALUES
 (5, 'Category 4', 'Category 1', 'ParentId', 'daibc1', 0, 'daibc5135', '2024-03-06 03:00:07', 'daibc5135', '2024-03-06 03:00:07'),
 (6, 'Category 5', 'Category 1', 'ParentId', 'daibc1', 0, 'daibc5135', '2024-03-06 03:00:58', 'daibc5135', '2024-03-06 03:00:58');
-
 
 
 CREATE TABLE `notifysendplan` (
@@ -78,7 +105,6 @@ CREATE TABLE `notifytempalte` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
-
 CREATE TABLE `userinvoice` (
   `Id` int(11) NOT NULL,
   `Total` varchar(250) NOT NULL,
@@ -100,9 +126,15 @@ CREATE TABLE `usernotify` (
   `Content` varchar(250) NOT NULL,
   `ArticleId` int(11) NOT NULL,
   `SendedBy` varchar(250) NOT NULL,
-  `Sended` varchar(250) NOT NULL,
+  `Sended` datetime NOT NULL DEFAULT current_timestamp(),
   `IsRead` smallint(6) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+INSERT INTO `usernotify` (`Id`, `Title`, `Content`, `ArticleId`, `SendedBy`, `Sended`, `IsRead`) VALUES
+(2, 'Title  3', 'Content', 1, 'daibc5135', '2024-03-07 01:23:43', 0),
+(3, 'Title  4', 'Content', 1, 'daibc5135', '2024-03-07 01:24:03', 0),
+(4, 'Title  6', 'Content', 1, 'daibc5135', '2024-03-07 01:24:45', 0);
 
 
 
@@ -123,11 +155,11 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
-
 INSERT INTO `users` (`Id`, `UserName`, `Password`, `DisplayName`, `Avatar`, `Email`, `IsActive`, `VerifyToken`, `Point`, `Level`, `TotalAmount`, `CreatedAt`, `UpdatedAt`) VALUES
 (9, 'daibc5135', '$2a$10$kC7lFbkA0nkRLZ9Di9qhcePowiAj045CkY02uhBnRJSn3qHqhvQWa', 'daibco', 'http://localhost:3000/images/665fdfff72e08d31c2444ad00a0040e9.jpg', 'dai12345@gmail.com', 0, 'cd37f11f-3bb5-45fa-8d4f-b455d0c979ee', NULL, NULL, NULL, '2024-03-06 00:21:46', '2024-03-06 00:21:46'),
 (10, 'daibc51356', '$2a$10$EqiAzhyroui44he7BPvQTOAPLajmGGIrm9ZTED0fxjo7BxN07/7Bi', 'daibco', 'http://localhost:3000/images/665fdfff72e08d31c2444ad00a0040e9.jpg', 'dai123456@gmail.com', 0, '20d6fc02-9ddd-4cf9-8e9e-19775b4e6f2e', NULL, NULL, NULL, '2024-03-06 00:23:30', '2024-03-06 00:23:30'),
 (11, 'daibc5', '$2a$10$/4lZh/nxyRFyNk7JMePrgOBY21gZJQ4H9edeQXTfNmIn6zulI4bpq', 'daibco', 'http://localhost:3000/images/f716f24124d69ad185e9d17584a281aa.png', 'dai234@gmail.com', 0, 'e00ac106-4c25-48ec-a5aa-357bab162831', NULL, NULL, NULL, '2024-03-06 00:24:24', '2024-03-06 00:24:24');
+
 
 
 CREATE TABLE `usertoken` (
@@ -141,6 +173,7 @@ CREATE TABLE `usertoken` (
 
 ALTER TABLE `article`
   ADD PRIMARY KEY (`Id`);
+
 
 ALTER TABLE `booking`
   ADD PRIMARY KEY (`Id`),
@@ -157,6 +190,7 @@ ALTER TABLE `notifysendplan`
 
 ALTER TABLE `notifytempalte`
   ADD PRIMARY KEY (`Id`);
+
 
 ALTER TABLE `userinvoice`
   ADD PRIMARY KEY (`Id`);
@@ -176,11 +210,12 @@ ALTER TABLE `usertoken`
 
 
 ALTER TABLE `article`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 
 ALTER TABLE `booking`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
 
 ALTER TABLE `category`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
@@ -197,9 +232,8 @@ ALTER TABLE `notifytempalte`
 ALTER TABLE `userinvoice`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
-
 ALTER TABLE `usernotify`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 
 ALTER TABLE `users`
@@ -213,10 +247,11 @@ ALTER TABLE `usertoken`
 ALTER TABLE `booking`
   ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`NotifyId`) REFERENCES `usernotify` (`Id`);
 
-
 ALTER TABLE `notifysendplan`
   ADD CONSTRAINT `notifysendplan_ibfk_1` FOREIGN KEY (`NotifyTempalteId`) REFERENCES `notifytempalte` (`Id`);
 
 
 ALTER TABLE `usertoken`
   ADD CONSTRAINT `usertoken_ibfk_1` FOREIGN KEY (`UserId`) REFERENCES `users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+

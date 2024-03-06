@@ -3,6 +3,7 @@ const express = require("express");
 const authRoutes = require("./auth.route");
 const categoryRoutes = require("./categories.route");
 const articlrRoutes = require("./article.route");
+const usernotifyRoutes = require("./usernotify.route");
 const HttpStatusCode = require("../../utilities/constants");
 
 
@@ -19,5 +20,6 @@ router.get("/status", (req, res) =>
 router.use("/auth", authRoutes);
 router.use("/category", categoryRoutes);
 router.use("/article", articlrRoutes);
+router.use("/usernotify", usernotifyRoutes);
 
 module.exports = router;

@@ -1,26 +1,26 @@
 
-const articleModel = require("../models/article.model");
+const userNotifyModel = require("../models/usernotify.model");
 const { v4: uuidv4 } = require("uuid");
 const { pick } = require("lodash");
 const env = require("../config/environtment");
 const { HttpStatusCode } = require("../../src/utilities/constants");
 
-const createArticle = async (req) => {
+const createUserNotify = async (req) => {
     try {
         let title = req.body.Title;
-        const article = await articleModel.getArticleByName(title)
-        if (article.length > 0) {
+        const userNotifies  = await userNotifyModel.getUserNotifyByName(title)
+        if (userNotifies.length > 0) {
             return {
                 status: HttpStatusCode.NOT_FOUND,
-                message: `Article is exirst`
+                message: `UserNotify is exirst`
             }
         }
 
-        const res = await articleModel.createArticle(req.body)
+        const res = await userNotifyModel.createUserNotify(req.body)
         if (res) {
             return {
                 status: HttpStatusCode.OK,
-                message: `Article create successfuly`,
+                message: `UserNotify create successfuly`,
                 data: res
             }
         }
@@ -33,19 +33,19 @@ const createArticle = async (req) => {
     }
 }
 
-const updateArticle = async (req) => {
+const updateUserNotify = async (req) => {
     try {
         const id = parseInt(req.params.id, 10)
-        let article = await articleModel.getArticleById(id)
-        if (article.length == 0) {
+        let userNotifies = await userNotifyModel.getUserNotifyById(id)
+        if (userNotifies.length == 0) {
             return {
-                message: `Article not found`
+                message: `UserNotify not found`
             }
         }
-        let res = await articleModel.updateArticle(req.body, id)
+        let res = await userNotifyModel.updateUserNotify(req.body, id)
         if (res.affectedRows > 0) {
             return {
-                message: `Article update successfuly`,
+                message: `UserNotify update successfuly`,
             }
         }
 
@@ -57,19 +57,19 @@ const updateArticle = async (req) => {
     }
 }
 
-const deleteArticle = async (req) => {
+const deleteUserNotify = async (req) => {
     try {
         const id = parseInt(req.params.id, 10)
-        let category = await articleModel.getArticleById(id)
-        if (category.length == 0) {
+        let UserNotify = await userNotifyModel.getUserNotifyById(id)
+        if (UserNotify.length == 0) {
             return {
-                message: `Article not found`,
+                message: `UserNotify not found`,
             }
         }
-        let res = await articleModel.deleteArticle(id)
+        let res = await userNotifyModel.deleteUserNotify(id)
         if (res.affectedRows > 0) {
             return {
-                message: `Article delete successfuly`
+                message: `UserNotify delete successfuly`
             }
         }
 
@@ -82,11 +82,11 @@ const deleteArticle = async (req) => {
 
 }
 
-const getArticles = async (req) => {
+const getUserNotifies = async (req) => {
     try {
         const page = parseInt(req.params.page, 10)
         const pageSize = parseInt(req.params.pageSize, 10)
-        let result = await articleModel.getArticles(page, pageSize)
+        let result = await userNotifyModel.getUserNotifies(page, pageSize)
         return {
             data: result
         }
@@ -99,10 +99,10 @@ const getArticles = async (req) => {
     }
 }
 
-const getArticleById = async (req, res) => {
+const getUserNotifyById = async (req, res) => {
     try {
         const id = parseInt(req.params.id, 10)
-        let result = await articleModel.getArticleById(id)
+        let result = await userNotifyModel.getUserNotifyById(id)
         return {
             data: result
         }
@@ -116,9 +116,9 @@ const getArticleById = async (req, res) => {
     }
 }
 
-const getAllArticle = async (req, res) => {
+const getAllUserNotify = async (req, res) => {
     try {
-        let result = await articleModel.getAllArticle()
+        let result = await userNotifyModel.getAllUserNotify()
         return {
             data: result
         }
@@ -133,10 +133,10 @@ const getAllArticle = async (req, res) => {
 }
 
 module.exports = {
-    createArticle,
-    updateArticle,
-    deleteArticle,
-    getArticles,
-    getArticleById,
-    getAllArticle
+    createUserNotify,
+    updateUserNotify,
+    deleteUserNotify,
+    getUserNotifies,
+    getUserNotifyById,
+    getAllUserNotify
 };
