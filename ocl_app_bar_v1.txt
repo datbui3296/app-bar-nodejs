@@ -1,31 +1,5 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th3 06, 2024 lúc 07:29 PM
--- Phiên bản máy phục vụ: 10.4.32-MariaDB
--- Phiên bản PHP: 8.0.30
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Cơ sở dữ liệu: `ocl_app_bar_v1`
---
-
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `article`
---
+CREATE DATABASE ocl_app_bar_v1
 
 CREATE TABLE `article` (
   `Id` int(11) NOT NULL,
@@ -42,6 +16,7 @@ CREATE TABLE `article` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+
 INSERT INTO `article` (`Id`, `Title`, `SubTitle`, `SubContent`, `Content`, `CreatedBy`, `Created`, `UpdatedBy`, `Updated`, `Status`, `OrderBy`) VALUES
 (2, 'Title 12', 'SubTitle', 'SubContent', 'Content', 'daibc5135', '2024-03-06 23:36:01', 'daibc5135', '2024-03-06 23:36:01', 'ACTIVE', ''),
 (3, 'Title 123', 'SubTitle', 'SubContent', 'Content', 'daibc5135', '2024-03-06 23:36:11', 'daibc5135', '2024-03-06 23:36:11', 'ACTIVE', ''),
@@ -52,16 +27,25 @@ INSERT INTO `article` (`Id`, `Title`, `SubTitle`, `SubContent`, `Content`, `Crea
 CREATE TABLE `booking` (
   `Id` int(11) NOT NULL,
   `NotifyId` int(11) NOT NULL,
-  `SuKien` int(11) NOT NULL,
+  `SuKien` varchar(250) NOT NULL,
   `BookDate` datetime NOT NULL DEFAULT current_timestamp(),
   `Quantity` int(250) NOT NULL,
+  `IsDeleted` smallint(6) NOT NULL DEFAULT 0 COMMENT '0 chưa delete 1 la delete',
   `CreatedBy` varchar(50) DEFAULT NULL,
   `Created` datetime NOT NULL DEFAULT current_timestamp(),
   `UpdatedBy` varchar(50) DEFAULT NULL,
   `Updated` datetime NOT NULL DEFAULT current_timestamp(),
-  `Status` varchar(15) NOT NULL DEFAULT 'ACTIVE' COMMENT 'ACTIVE,INACTIVE'
+  `Status` varchar(15) NOT NULL DEFAULT 'PENDING' COMMENT 'PENDING, VERRIFY'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
+
+INSERT INTO `booking` (`Id`, `NotifyId`, `SuKien`, `BookDate`, `Quantity`, `IsDeleted`, `CreatedBy`, `Created`, `UpdatedBy`, `Updated`, `Status`) VALUES
+(6, 7, 'Thao lay chong', '2024-03-08 03:31:13', 11, 1, NULL, '2024-03-08 03:31:13', NULL, '2024-03-08 03:31:13', 'PENDING'),
+(7, 6, 'Sự kiên ăn cưới huydv', '2024-03-08 03:31:40', 10, 0, NULL, '2024-03-08 03:31:40', NULL, '2024-03-08 03:31:40', 'VERRIFY'),
+(8, 6, 'Sự kiên ăn cưới huydv 2', '2024-03-08 03:31:55', 10, 0, NULL, '2024-03-08 03:31:55', NULL, '2024-03-08 03:31:55', 'VERRIFY'),
+(9, 6, 'Sự kiên ăn cưới huydv 23', '2024-03-08 03:31:59', 10, 0, NULL, '2024-03-08 03:31:59', NULL, '2024-03-08 03:31:59', 'PENDING'),
+(10, 6, 'Sự kiên ăn cưới huydv va T', '2024-03-08 03:32:07', 10, 0, NULL, '2024-03-08 03:32:07', NULL, '2024-03-08 03:32:07', 'PENDING');
 
 
 CREATE TABLE `category` (
@@ -77,9 +61,11 @@ CREATE TABLE `category` (
   `Updated` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
 INSERT INTO `category` (`Id`, `Name`, `Description`, `ParentId`, `OrderBy`, `IsActive`, `CreatedBy`, `Created`, `UpdatedBy`, `Updated`) VALUES
 (5, 'Category 4', 'Category 1', 'ParentId', 'daibc1', 0, 'daibc5135', '2024-03-06 03:00:07', 'daibc5135', '2024-03-06 03:00:07'),
 (6, 'Category 5', 'Category 1', 'ParentId', 'daibc1', 0, 'daibc5135', '2024-03-06 03:00:58', 'daibc5135', '2024-03-06 03:00:58');
+
 
 
 CREATE TABLE `notifysendplan` (
@@ -105,23 +91,34 @@ CREATE TABLE `notifytempalte` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+
 CREATE TABLE `userinvoice` (
   `Id` int(11) NOT NULL,
-  `Total` varchar(250) NOT NULL,
-  `Status` int(4) NOT NULL DEFAULT 1,
+  `Total` float NOT NULL,
+  `Status` int(4) NOT NULL DEFAULT 0 COMMENT '0 là chưa trả , 1 là đã trả',
   `IsPaided` smallint(6) NOT NULL DEFAULT 0,
-  `Paidate` int(250) NOT NULL,
-  `PaidBy` int(250) NOT NULL,
+  `Paidate` datetime NOT NULL DEFAULT current_timestamp(),
+  `PaidBy` varchar(250) NOT NULL,
+  `ReferenceData` int(11) NOT NULL,
   `CreatedBy` varchar(250) DEFAULT NULL,
   `Created` datetime NOT NULL DEFAULT current_timestamp(),
   `UpdatedBy` varchar(250) NOT NULL,
-  `Updated` varchar(250) DEFAULT NULL
+  `Updated` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+INSERT INTO `userinvoice` (`Id`, `Total`, `Status`, `IsPaided`, `Paidate`, `PaidBy`, `ReferenceData`, `CreatedBy`, `Created`, `UpdatedBy`, `Updated`) VALUES
+(6, 150000000, 0, 0, '2024-03-08 04:45:50', 'daibc12', 7, NULL, '2024-03-08 04:45:50', '', '2024-03-08 04:45:50'),
+(7, 150000000, 0, 0, '2024-03-08 04:46:28', 'daibc12', 7, NULL, '2024-03-08 04:46:28', '', '2024-03-08 04:46:28'),
+(8, 150000000, 0, 0, '2024-03-08 04:46:30', 'daibc12', 7, NULL, '2024-03-08 04:46:30', '', '2024-03-08 04:46:30'),
+(9, 150000000, 0, 0, '2024-03-08 04:46:31', 'daibc12', 7, NULL, '2024-03-08 04:46:31', '', '2024-03-08 04:46:31');
 
 
 
 CREATE TABLE `usernotify` (
   `Id` int(11) NOT NULL,
+  `UserId` int(11) NOT NULL,
   `Title` varchar(250) NOT NULL,
   `Content` varchar(250) NOT NULL,
   `ArticleId` int(11) NOT NULL,
@@ -131,10 +128,10 @@ CREATE TABLE `usernotify` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
-INSERT INTO `usernotify` (`Id`, `Title`, `Content`, `ArticleId`, `SendedBy`, `Sended`, `IsRead`) VALUES
-(2, 'Title  3', 'Content', 1, 'daibc5135', '2024-03-07 01:23:43', 0),
-(3, 'Title  4', 'Content', 1, 'daibc5135', '2024-03-07 01:24:03', 0),
-(4, 'Title  6', 'Content', 1, 'daibc5135', '2024-03-07 01:24:45', 0);
+INSERT INTO `usernotify` (`Id`, `UserId`, `Title`, `Content`, `ArticleId`, `SendedBy`, `Sended`, `IsRead`) VALUES
+(6, 9, 'Title  7', 'Content', 1, 'daibc5135', '2024-03-08 02:28:54', 0),
+(7, 9, 'Title  8', 'Content', 1, 'daibc5135', '2024-03-08 02:30:02', 0),
+(8, 10, 'Title  10', 'Content', 1, 'daibc5135', '2024-03-08 02:30:55', 0);
 
 
 
@@ -150,16 +147,17 @@ CREATE TABLE `users` (
   `Point` int(50) DEFAULT NULL,
   `Level` int(10) DEFAULT NULL,
   `TotalAmount` int(250) DEFAULT NULL,
+  `ResetToken` varchar(250) DEFAULT NULL,
+  `ResetTokenExpery` varchar(250) DEFAULT NULL,
   `CreatedAt` datetime NOT NULL DEFAULT current_timestamp(),
   `UpdatedAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
-INSERT INTO `users` (`Id`, `UserName`, `Password`, `DisplayName`, `Avatar`, `Email`, `IsActive`, `VerifyToken`, `Point`, `Level`, `TotalAmount`, `CreatedAt`, `UpdatedAt`) VALUES
-(9, 'daibc5135', '$2a$10$kC7lFbkA0nkRLZ9Di9qhcePowiAj045CkY02uhBnRJSn3qHqhvQWa', 'daibco', 'http://localhost:3000/images/665fdfff72e08d31c2444ad00a0040e9.jpg', 'dai12345@gmail.com', 0, 'cd37f11f-3bb5-45fa-8d4f-b455d0c979ee', NULL, NULL, NULL, '2024-03-06 00:21:46', '2024-03-06 00:21:46'),
-(10, 'daibc51356', '$2a$10$EqiAzhyroui44he7BPvQTOAPLajmGGIrm9ZTED0fxjo7BxN07/7Bi', 'daibco', 'http://localhost:3000/images/665fdfff72e08d31c2444ad00a0040e9.jpg', 'dai123456@gmail.com', 0, '20d6fc02-9ddd-4cf9-8e9e-19775b4e6f2e', NULL, NULL, NULL, '2024-03-06 00:23:30', '2024-03-06 00:23:30'),
-(11, 'daibc5', '$2a$10$/4lZh/nxyRFyNk7JMePrgOBY21gZJQ4H9edeQXTfNmIn6zulI4bpq', 'daibco', 'http://localhost:3000/images/f716f24124d69ad185e9d17584a281aa.png', 'dai234@gmail.com', 0, 'e00ac106-4c25-48ec-a5aa-357bab162831', NULL, NULL, NULL, '2024-03-06 00:24:24', '2024-03-06 00:24:24');
-
+INSERT INTO `users` (`Id`, `UserName`, `Password`, `DisplayName`, `Avatar`, `Email`, `IsActive`, `VerifyToken`, `Point`, `Level`, `TotalAmount`, `ResetToken`, `ResetTokenExpery`, `CreatedAt`, `UpdatedAt`) VALUES
+(9, 'daibc5135', '$2a$10$a49.DCzjR26Qv/086SoeYOQroRegbgFiLvrBclK4PwhDM0lc68QLW', 'daibco', 'http://localhost:3000/images/665fdfff72e08d31c2444ad00a0040e9.jpg', 'datbui3296@gmail.com', 0, 'cd37f11f-3bb5-45fa-8d4f-b455d0c979ee', NULL, NULL, NULL, NULL, '1709843032747', '2024-03-06 00:21:46', '2024-03-06 00:21:46'),
+(10, 'daibc51356', '$2a$10$EqiAzhyroui44he7BPvQTOAPLajmGGIrm9ZTED0fxjo7BxN07/7Bi', 'daibco', 'http://localhost:3000/images/665fdfff72e08d31c2444ad00a0040e9.jpg', 'dai123456@gmail.com', 0, '20d6fc02-9ddd-4cf9-8e9e-19775b4e6f2e', NULL, NULL, NULL, NULL, NULL, '2024-03-06 00:23:30', '2024-03-06 00:23:30'),
+(11, 'daibc5', '$2a$10$/4lZh/nxyRFyNk7JMePrgOBY21gZJQ4H9edeQXTfNmIn6zulI4bpq', 'daibco', 'http://localhost:3000/images/f716f24124d69ad185e9d17584a281aa.png', 'dai234@gmail.com', 0, 'e00ac106-4c25-48ec-a5aa-357bab162831', NULL, NULL, NULL, NULL, NULL, '2024-03-06 00:24:24', '2024-03-06 00:24:24');
 
 
 CREATE TABLE `usertoken` (
@@ -179,7 +177,6 @@ ALTER TABLE `booking`
   ADD PRIMARY KEY (`Id`),
   ADD KEY `NotifyId` (`NotifyId`);
 
-
 ALTER TABLE `category`
   ADD PRIMARY KEY (`Id`);
 
@@ -187,6 +184,7 @@ ALTER TABLE `category`
 ALTER TABLE `notifysendplan`
   ADD PRIMARY KEY (`Id`),
   ADD KEY `NotifyTempalteId` (`NotifyTempalteId`);
+
 
 ALTER TABLE `notifytempalte`
   ADD PRIMARY KEY (`Id`);
@@ -214,7 +212,7 @@ ALTER TABLE `article`
 
 
 ALTER TABLE `booking`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 
 ALTER TABLE `category`
@@ -230,15 +228,15 @@ ALTER TABLE `notifytempalte`
 
 
 ALTER TABLE `userinvoice`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
 
 ALTER TABLE `usernotify`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 
 ALTER TABLE `users`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id user', AUTO_INCREMENT=12;
-
 
 ALTER TABLE `usertoken`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
@@ -247,11 +245,11 @@ ALTER TABLE `usertoken`
 ALTER TABLE `booking`
   ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`NotifyId`) REFERENCES `usernotify` (`Id`);
 
+
 ALTER TABLE `notifysendplan`
   ADD CONSTRAINT `notifysendplan_ibfk_1` FOREIGN KEY (`NotifyTempalteId`) REFERENCES `notifytempalte` (`Id`);
 
 
 ALTER TABLE `usertoken`
   ADD CONSTRAINT `usertoken_ibfk_1` FOREIGN KEY (`UserId`) REFERENCES `users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
 
