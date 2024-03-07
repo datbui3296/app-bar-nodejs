@@ -10,6 +10,8 @@ router.post("/register", AuthValidation.register, AuthController.register);
 router.post("/login", AuthValidation.login, AuthController.login);
 router.get("/getById/:id", AuthServive.authMiddleWare, AuthController.getUserById);
 router.post("/refreshToken", AuthController.refreshToken);
+router.post("/forgotPassword", AuthController.forgotPassword);
+router.post("/resetPassword", AuthController.resetPassword);
 
 // router.route('/refreshToken')
 //     .get(authMiddleware.isRefreshToken, AuthController.refreshToken)

@@ -22,7 +22,6 @@ const bootServer = async () => {
   app.use(express.json());
   app.use(FileUpload());
   app.use('/uploads',express.static("uploads"));
-
   // Use APIs v1
   app.use("/api/v1", apiV1);
   const server = http.createServer(app);

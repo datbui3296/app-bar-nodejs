@@ -1,11 +1,11 @@
 const { HttpStatusCode } = require("../../src/utilities/constants");
-const UserNotifyService = require("../../src/services/usernotify.service");
+const UserInvoiceService = require("../../src/services/userinvoice.service");
 const ms = require("ms");
 
-const createUserNotify = async (req, res) => {
+const createUserInvoice = async (req, res) => {
     try {
 
-        const result = await UserNotifyService.createUserNotify(req, res);
+        const result = await UserInvoiceService.createUserInvoice(req, res);
         return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ message: result?.message })
 
     } catch (error) {
@@ -16,9 +16,9 @@ const createUserNotify = async (req, res) => {
     }
 }
 
-const getUserNotifies = async (req, res) => {
+const getUserInvoices = async (req, res) => {
     try {
-        const result = await UserNotifyService.getUserNotifies(req, res);
+        const result = await UserInvoiceService.getUserInvoices(req, res);
         return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ data: result?.data })
 
     } catch (error) {
@@ -29,10 +29,10 @@ const getUserNotifies = async (req, res) => {
     }
 }
 
-const getUserNotifyById = async (req, res) => {
+const getUserInvoiceId = async (req, res) => {
     try {
 
-        const result = await UserNotifyService.getUserNotifyById(req, res);
+        const result = await UserInvoiceService.getUserInvoiceId(req, res);
         return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ data: result?.data })
 
     } catch (error) {
@@ -43,10 +43,10 @@ const getUserNotifyById = async (req, res) => {
     }
 }
 
-const updateUserNotify = async (req, res) => {
+const updateUserInvoice = async (req, res) => {
     try {
 
-        const result = await UserNotifyService.updateUserNotify(req, res);
+        const result = await UserInvoiceService.updateUserInvoice(req, res);
         return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ message: result?.message })
     } catch (error) {
         return res.status(HttpStatusCode.INTERNAL_SERVER).json({
@@ -56,10 +56,10 @@ const updateUserNotify = async (req, res) => {
     }
 }
 
-const deleteUserNotify = async (req, res) => {
+const deleteUserInvoice= async (req, res) => {
     try {
 
-        const result = await UserNotifyService.deleteUserNotify(req, res);
+        const result = await UserInvoiceService.deleteUserInvoice(req, res);
         return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ data: result?.message })
     } catch (error) {
         return res.status(HttpStatusCode.INTERNAL_SERVER).json({
@@ -69,9 +69,9 @@ const deleteUserNotify = async (req, res) => {
     }
 }
 
-const getAllUserNotifies = async (req, res) => {
+const getAllUserInvoices = async (req, res) => {
     try {
-        const result = await UserNotifyService.getAllUserNotify(req, res);
+        const result = await UserInvoiceService.getAllUserInvoices(req, res);
         return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ data: result?.data })
 
     } catch (error) {
@@ -82,26 +82,14 @@ const getAllUserNotifies = async (req, res) => {
     }
 }
 
-const getUserNotifieByUserId = async (req, res) => {
-    try {
-        const result = await UserNotifyService.getUserNotifyByUserId(req, res);
-        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ data: result?.data })
 
-    } catch (error) {
-        res.status(HttpStatusCode.INTERNAL_SERVER).json({
-            message: error.message
-        })
-
-    }
-}
 
 module.exports = {
-    createUserNotify,
-    getUserNotifies,
-    getUserNotifyById,
-    updateUserNotify,
-    deleteUserNotify,
-    getAllUserNotifies,
-    getUserNotifieByUserId
+    createUserInvoice,
+    getUserInvoices,
+    getUserInvoiceId,
+    updateUserInvoice,
+    getAllUserInvoices,
+    deleteUserInvoice
 
 }

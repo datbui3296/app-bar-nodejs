@@ -1,15 +1,4 @@
-// import { AuthModel } from '*/models/user.model'
 
-// import { v4 as uuidv4 } from 'uuid'
-// import { pick } from 'lodash'
-// import { SendInBlueProvider } from '*/providers/sendInBlueProvider.js'
-// const jwt = require('jsonwebtoken')
-// import { env } from '*/config/environtment'
-// import { WebsiteDomain } from '*/utilities/constants'
-// import { pickUser } from '../utilities/transform'
-// import { JwtProvider } from '../providers/JwtProvider'
-// import { CloudinaryProvider } from '../providers/CoudinaryProvider'
-// import { RedisQueueProvider } from '../providers/redisQueueProvider'
 const bcrypt = require("bcryptjs");
 const AuthModel = require("../models/user.model");
 const { v4: uuidv4 } = require("uuid");
@@ -17,6 +6,12 @@ const { pick } = require("lodash");
 const env = require("../config/environtment");
 const JwtProvider = require("../providers/JwtProvider");
 const { HttpStatusCode } = require("../../src/utilities/constants");
+const baseModel = require('../utilities/BaseModel')
+const createTransporter = require('../../src/utilities/transporter');
+const crypto = require('crypto');
+
+const createTransporterMail = createTransporter()
+
 
 const register = async (data) => {
   try {
@@ -210,11 +205,117 @@ const getUserById = async (id) => {
   }
 }
 
+const forgotPassword = async (req) => {
+  try {
+    let tableUserName = "users"
+    const email = req.body.Email;
+    let userByEmail = await baseModel.getDataByConditions(tableUserName, { Email: email })
+    if (userByEmail.length == 0) {
+      return {
+        status: HttpStatusCode.NOT_FOUND,
+        message: "User Email not found"
+
+      }
+    }
+    const resetToken = crypto.randomBytes(20).toString('hex');
+    const resetTokenExpiry = Date.now() + 3600000; // Token expires in 1 hour
+
+    const updatedData = {
+      ResetToken: resetToken,
+      ResetTokenExpery: resetTokenExpiry,
+      // Add other columns and values as eeded
+    };
+
+    const condition = "Id = ?"
+    const conditionParams = [userByEmail[0]?.Id];
+
+    var resultUpdate = await baseModel.getUpdateDataByConditions(tableUserName, updatedData, condition, conditionParams);
+    if (resultUpdate.affectedRows > 0) {
+      const mailOptions = {
+        from: 'datbui3296@gmail.com',
+        to: email,
+        subject: 'Password Reset Request',
+        text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n`
+          + `Please click on the following link, or paste this into your browser to complete the process:\n\n`
+          + `http://localhost:3000/reset-password?token=${resetToken}\n\n`
+          + `If you did not request this, please ignore this email and your password will remain unchanged.\n`
+      };
+
+      createTransporterMail.sendMail(mailOptions, (error) => {
+        if (error) {
+          console.error('Error sending email:', error);
+          return {
+            status: HttpStatusCode.INTERNAL_SERVER,
+            message: `Failed to send reset email`
+          }
+        } else {
+          console.log('Reset token sent:', resetToken);
+          return {
+            status: HttpStatusCode.OK,
+            message: `Reset token sent to your email`
+          }
+        }
+      });
+      createTransporterMail.close();
+
+    }
+
+  } catch (error) {
+    return {
+      status: HttpStatusCode.BAD_REQUEST,
+      message: error.message
+    }
+
+  }
+}
+
+const resetPassword = async (req) => {
+  try {
+    let tableUserName = "users"
+    const { Token, NewPassword } = req.body;
+    let userByEmail = await baseModel.getDataByConditions(tableUserName, { ResetToken: Token })
+    if (userByEmail[0].ResetTokenExpery < Date.now()) {
+      return {
+        status: HttpStatusCode.EXPIRED,
+        message: `Invalid or expired reset token`
+      }
+    }
+    const hashedPassword = await bcrypt.hashSync(NewPassword, 10);
+    const updatedData = {
+      ResetToken: null,
+      Password: hashedPassword,
+      // Add other columns and values as eeded
+    };
+
+    const condition = "ResetToken = ?"
+    const conditionParams = [Token];
+
+
+    var resultUpdatePassword = await baseModel.getUpdateDataByConditions(tableUserName, updatedData, condition, conditionParams);
+    if (resultUpdatePassword.affectedRows > 0) {
+      return {
+        status: HttpStatusCode.OK,
+        message: `Reset password successfuly`
+      }
+    }
+
+  } catch (error) {
+    return {
+      status: HttpStatusCode.BAD_REQUEST,
+      message: error.message
+    }
+
+  }
+
+}
+
 module.exports = {
   register,
   verifyToken,
   login,
   refreshToken,
   authMiddleWare,
-  getUserById
+  getUserById,
+  forgotPassword,
+  resetPassword
 };
