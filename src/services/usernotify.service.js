@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 const { pick } = require("lodash");
 const env = require("../config/environtment");
 const { HttpStatusCode } = require("../../src/utilities/constants");
+const baseModel = require('../utilities/BaseModel')
 
 const createUserNotify = async (req) => {
     try {
@@ -132,11 +133,30 @@ const getAllUserNotify = async (req, res) => {
     }
 }
 
+const getUserNotifyByUserId = async (req, res) => {
+    try {
+        const userId = parseInt(req.params.userId, 10)
+        let usernotify = "usernotify"
+        let result = await baseModel.getDataByConditions(usernotify, {UserId: userId})
+        return {
+            data: result
+        }
+
+    } catch (error) {
+        return {
+            status: HttpStatusCode.BAD_REQUEST,
+            mesage: error.message
+        }
+
+    }
+}
+
 module.exports = {
     createUserNotify,
     updateUserNotify,
     deleteUserNotify,
     getUserNotifies,
     getUserNotifyById,
-    getAllUserNotify
+    getAllUserNotify,
+    getUserNotifyByUserId
 };

@@ -171,6 +171,19 @@ const searchSortAndPaginateData = async (tableName, searchConditions, sortBy, pa
   }
 }
 
+// const targetId = 1; // Set the ID of the row to update
+// const updatedData = {
+//     column1: 'new_value1',
+//     column2: 'new_value2',
+//     // Add other columns and values as needed
+// };
+
+// const conditionColumn = 'id'; // Adjust the condition column based on your use case
+// const conditionValue = targetId;
+
+// const condition = `${conditionColumn} = ?`;
+// const conditionParams = [conditionValue];
+
 const getDataByConditions = async (tableName, conditions) => {
   try {
     let sql = `SELECT * FROM ${tableName} WHERE `;
@@ -193,6 +206,42 @@ const getDataByConditions = async (tableName, conditions) => {
   }
 }
 
+const getUpdateDataByConditions = async (tableName, updateFields, condition, conditionParams) => {
+  const updateKeys = Object.keys(updateFields);
+  const updateValues = Object.values(updateFields);
+
+  const updateString = updateKeys.map((key) => `${key} = ?`).join(', ');
+  const sql = `UPDATE ${tableName} SET ${updateString} WHERE ${condition}`;
+
+  try {
+    const result = await database.excuteQuery(sql, [...updateValues, ...conditionParams]);
+    console.log('Data updated successfully');
+    return result;
+  } catch (error) {
+    console.error('Error updating data:', error.message);
+    throw error;
+  }
+}
+
+const performDynamicQueryOperator = async (tableName, conditions) => {
+  let sql = `SELECT * FROM ${tableName}`
+
+  if (conditions && Object.keys(conditions).length > 0) {
+    sql += ' WHERE ';
+    const conditionsArray = [];
+
+    // Iterate through the conditions object
+    for (const key in conditions) {
+      if (conditions.hasOwnProperty(key)) {
+        const condition = conditions[key];
+        conditionsArray.push(`${condition.column} ${condition.operator} ${connection.escape(condition.value)}`);
+      }
+    }
+    sql += conditionsArray.join(' AND ');
+
+  }
+}
+
 
 module.exports = {
   create,
@@ -207,6 +256,8 @@ module.exports = {
   getQueryByColumn,
   executeStoredProcedure,
   searchSortAndPaginateData,
-  getDataByConditions
+  getDataByConditions,
+  getUpdateDataByConditions,
+  performDynamicQueryOperator
 
-};
+}

@@ -156,6 +156,34 @@ const getUserById = async (req, res) => {
     }
 }
 
+const forgotPassword = async (req, res) => {
+    try {
+
+        let result = await AuthService.forgotPassword(req)
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ message: result?.message })
+
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            errors: error.message
+        })
+    }
+
+}
+
+const resetPassword = async (req, res) => {
+    try {
+
+        let result = await AuthService.resetPassword(req)
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ message: result?.message })
+
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            errors: error.message
+        })
+    }
+
+}
+
 module.exports = {
     register,
     verify,
@@ -165,4 +193,6 @@ module.exports = {
     update,
     updateAvatar,
     getUserById,
+    forgotPassword,
+    resetPassword
 }

@@ -82,12 +82,26 @@ const getAllUserNotifies = async (req, res) => {
     }
 }
 
+const getUserNotifieByUserId = async (req, res) => {
+    try {
+        const result = await UserNotifyService.getUserNotifyByUserId(req, res);
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ data: result?.data })
+
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            message: error.message
+        })
+
+    }
+}
+
 module.exports = {
     createUserNotify,
     getUserNotifies,
     getUserNotifyById,
     updateUserNotify,
     deleteUserNotify,
-    getAllUserNotifies
+    getAllUserNotifies,
+    getUserNotifieByUserId
 
 }
