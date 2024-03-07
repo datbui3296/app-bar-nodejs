@@ -4,6 +4,7 @@ const authRoutes = require("./auth.route");
 const categoryRoutes = require("./categories.route");
 const articlrRoutes = require("./article.route");
 const usernotifyRoutes = require("./usernotify.route");
+const bookingRoutes = require("./booking.route");
 const HttpStatusCode = require("../../utilities/constants");
 
 
@@ -21,5 +22,6 @@ router.use("/auth", authRoutes);
 router.use("/category", categoryRoutes);
 router.use("/article", articlrRoutes);
 router.use("/usernotify", usernotifyRoutes);
+router.use("/booking", bookingRoutes);
 
 module.exports = router;
