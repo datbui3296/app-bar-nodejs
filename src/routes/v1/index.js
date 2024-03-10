@@ -4,7 +4,8 @@ const authRoutes = require("./auth.route");
 const categoryRoutes = require("./categories.route");
 const articlrRoutes = require("./article.route");
 const usernotifyRoutes = require("./usernotify.route");
-const notifyTemplateRoutes = require("./booking.route");
+const notifyTemplateRoutes = require("./notifytemplate.route");
+const bookingRoutes = require("./booking.route");
 const userInvoiceRoutes = require("./notifytemplate.route");
 const HttpStatusCode = require("../../utilities/constants");
 
