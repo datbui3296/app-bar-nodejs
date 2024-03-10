@@ -10,7 +10,7 @@ const userCollectionSchema = Joi.object({
     Password: Joi.string().required().trim(),
     DisplayName: Joi.string().required(),
     Phone: Joi.string().required().trim(),
-    BirtDate: Joi.date().timestamp().required(),
+    BirthDate: Joi.date().timestamp().required(),
     IsActive: Joi.boolean().default(true),
     VerifyToken: Joi.string(),
     // currentRefreshToken: Joi.array(),

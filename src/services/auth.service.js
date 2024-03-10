@@ -28,7 +28,7 @@ const register = async (data) => {
       VerifyToken: uuidv4(),
       Avatar: data.Avatar,
       Phone: data.Phone,
-      BirtDate: data.BirtDate
+      BirthDate: data.BirthDate
     };
     // transaction mongodb
     const createdUser = await AuthModel.register(newData);
