@@ -115,7 +115,7 @@ const login = async (data) => {
       status: 1,
       message: "Login successfully",
       data: {
-        Email: user[0].Email, Phone: user[0].Phone, AccessToken: accessToken, RefreshToken: refreshToken, UserId: user[0].Id
+        Email: user[0].Email, Phone: user[0].Phone, AccessToken: accessToken, RefreshToken: refreshToken, UserId: user[0].Id,DisplayName: user[0].DisplayName
       }
     };
   } catch (error) {
