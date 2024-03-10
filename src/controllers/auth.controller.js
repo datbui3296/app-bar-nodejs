@@ -9,7 +9,7 @@ const fs = require("fs")
 const register = async (req, res) => {
     try {
         const result = await AuthService.register(req.body)
-        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ message: result?.message, data: result?.data })
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ status: result?.status, message: result?.message, data: result?.data })
 
     } catch (error) {
         res.status(HttpStatusCode.INTERNAL_SERVER).json({
@@ -39,7 +39,7 @@ const login = async (req, res) => {
         res.cookie('refreshToken', result.data.RefreshToken, { httpOnly: true, secure: true, sameSite: 'none', maxAge: ms('12 days') })
         res.cookie('_id', result.data.UserId, { httpOnly: true, secure: true, sameSite: 'none', maxAge: ms('12 days') })
 
-        res.status(HttpStatusCode.OK).json(result)
+        res.status(HttpStatusCode.OK).json({ status: result?.status, message: result?.message, data: result?.data })
     } catch (error) {
         res.status(HttpStatusCode.INTERNAL_SERVER).json({
             errors: error.message
@@ -90,11 +90,11 @@ const refreshToken = async (req, res) => {
 
 const update = async (req, res) => {
     try {
-        const userId = req.jwtDecoded._id
-        const userAvatarFile = req.file
-        const result = await AuthService.update(userId, req.body, userAvatarFile)
+        const result = await AuthService.update(req)
+        if (result) {
+            return res.status(HttpStatusCode.OK).json({ message: result?.message, data: result?.data })
+        }
 
-        res.status(HttpStatusCode.OK).json(result)
     } catch (error) {
         res.status(HttpStatusCode.INTERNAL_SERVER).json({
             errors: error.message

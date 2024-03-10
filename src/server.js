@@ -21,7 +21,7 @@ const bootServer = async () => {
   app.use(bodyParser.json());
   app.use(express.json());
   app.use(FileUpload());
-  app.use('/uploads',express.static("uploads"));
+  app.use('/uploads', express.static('uploads'))
   // Use APIs v1
   app.use("/api/v1", apiV1);
   const server = http.createServer(app);
@@ -30,7 +30,7 @@ const bootServer = async () => {
       `Hello app , I'm running at port: ${process.env.PORT || env.APP_PORT}/`
     );
   });
-  // app.use('/uploads', express.static('uploads'))
+  
   // app.use('/', function (req, res) {
   //     res.sendFile(path.join(__dirname + '/frontend/index.html'))
   //     //__dirname : It will resolve to your project folder.

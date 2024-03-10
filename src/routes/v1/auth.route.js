@@ -12,6 +12,7 @@ router.get("/getById/:id", AuthServive.authMiddleWare, AuthController.getUserByI
 router.post("/refreshToken", AuthController.refreshToken);
 router.post("/forgotPassword", AuthController.forgotPassword);
 router.post("/resetPassword", AuthController.resetPassword);
+router.patch("/update/:id", AuthController.update);
 
 // router.route('/refreshToken')
 //     .get(authMiddleware.isRefreshToken, AuthController.refreshToken)

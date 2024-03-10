@@ -8,6 +8,7 @@ const JwtProvider = require("../providers/JwtProvider");
 const { HttpStatusCode } = require("../../src/utilities/constants");
 const baseModel = require('../utilities/BaseModel')
 const createTransporter = require('../../src/utilities/transporter');
+const path = require('path');
 const crypto = require('crypto');
 
 const createTransporterMail = createTransporter()
@@ -18,7 +19,7 @@ const register = async (data) => {
     const phones = await AuthModel.findOneByPhone(data.Phone);
     if (phones.length > 0) {
       return {
-        status: HttpStatusCode.NOT_FOUND,
+        status: 0,
         message: "User is exirt!"
       }
     }
@@ -42,7 +43,7 @@ const register = async (data) => {
       UserId: user.Id,
     };
     return {
-      status: HttpStatusCode.OK,
+      status: 1,
       message: "User create successfully!",
       data: dataRes
     }
@@ -71,7 +72,7 @@ const login = async (data) => {
   try {
     const user = await AuthModel.findOneByPhone(data.Phone);
     if (!user) {
-      throw new Error("User Not Found");
+      return { status: 0, message: 'User not found' }
       //return { stt: false, msg: 'Incorrect username or password' }
     }
     const isCheckPassword = await bcrypt.compareSync(
@@ -79,11 +80,11 @@ const login = async (data) => {
       user[0].Password
     );
     if (!isCheckPassword) {
-      throw new Error("Incorrect username or password");
+      return { status: 0, message: 'Incorrect username or password' }
       //return { stt: false, msg: 'Incorrect username or password' }
     }
     if (user[0].isActive) {
-      throw new Error("Account is not active");
+      return { status: 0, message: 'Account is not active' }
       //return { stt: false, msg: 'Account is not active' }
     }
 
@@ -108,9 +109,10 @@ const login = async (data) => {
     }
 
     let result = await AuthModel.createUserLogin(dataCreateUserToken);
-    if (result.length == 0) return { mesage: "Login not success" }
+    if (result.length == 0) return { status: 1, mesage: "Login not success" }
 
     return {
+      status: 1,
       message: "Login successfully",
       data: {
         Email: user[0].Email, Phone: user[0].Phone, AccessToken: accessToken, RefreshToken: refreshToken, UserId: user[0].Id
@@ -300,6 +302,48 @@ const resetPassword = async (req) => {
   }
 
 }
+const update = async (req) => {
+  try {
+    let checkSucess = false
+    const userId = parseInt(req.params.id, 10)
+    const user = await AuthModel.findOneById(userId);
+    if (!user) {
+      return { status: 0, message: 'User not found' }
+    } if (req.files == null) return res.status(HttpStatusCode.BAD_REQUEST).json({ message: `No File Uploaded` });
+    const file = req.files.file;
+    const fileSize = file?.data?.length;
+    const ext = path.extname(file.name);
+    const fileName = file.md5 + ext;
+    const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+    const allowedType = ['.png', '.jpg', '.jpeg'];
+    if (!allowedType.includes(ext.toLowerCase())) return res.status(HttpStatusCode.INVALID_IMAGE).json({ mesage: "Invalid Images" });
+    if (fileSize > 5000000) return res.status(HttpStatusCode.INVALID_IMAGE).json({ mesage: "Image must be less than 5 MB" });
+    await file.mv(`./src/uploads/${fileName}`, async (err) => {
+      if (err) return res.status(HttpStatusCode.INTERNAL_SERVER).json({ msg: err.message });
+      try {
+        let data = { ...req.body, Avatar: url }
+        let updateRes = await AuthModel.update(userId, data)
+        if (updateRes.affectedRows > 0) {
+          checkSucess = true
+        }
+
+      } catch (error) {
+        console.log(error.message);
+      }
+    })
+    if (checkSucess) {
+      return { status: 1, message: 'User update successfuly' }
+    }
+
+  } catch (error) {
+    return {
+      status: HttpStatusCode.BAD_REQUEST,
+      message: error.message
+    }
+
+  }
+}
+
 
 module.exports = {
   register,
@@ -309,5 +353,6 @@ module.exports = {
   authMiddleWare,
   getUserById,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  update
 };

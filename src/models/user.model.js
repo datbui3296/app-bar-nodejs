@@ -82,7 +82,7 @@ const createUserLogin = async (data) => {
 
 const update = async (id, data) => {
     try {
-        const result = await baseModel.update(data, userCollectionName)
+        const result = await baseModel.update(data, id, userCollectionName)
         return result
     } catch (error) {
         throw new Error(error)
