@@ -83,7 +83,7 @@ const getAllArticle = async (req, res) => {
 const getActicleEventOrPreferential = async(req, res) => {
     try {
         const result = await articleService.getActicleEventOrPreferential(req, res);
-        return res.status(HttpStatusCode.OK).json({status: result?.status, data: result?.data })
+        return res.status(HttpStatusCode.OK).json({data: result?.data })
 
     } catch (error) {
         res.status(HttpStatusCode.INTERNAL_SERVER).json({

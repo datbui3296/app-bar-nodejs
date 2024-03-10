@@ -5,7 +5,7 @@ const { pick } = require("lodash");
 const env = require("../config/environtment");
 const { HttpStatusCode } = require("../../src/utilities/constants");
 const path = require("path");
-const { error } = require("console");
+const baseModel = require('../utilities/BaseModel')
 
 const createArticle = async (req) => {
     try {
@@ -172,10 +172,11 @@ const getAllArticle = async (req, res) => {
 
 const getActicleEventOrPreferential = async (req) => {
     try {
-        let catergoryId =  parseInt(req.params.id, 10)
-        let resultCategory = await baseModel.getDataByConditions(users, { CategoryId: catergoryId })
-        if(resultCategory.length == 0) return {status: HttpStatusCode.BAD_REQUEST, mesage: `Article not found`}
-        return resultCategory
+        let acticleTable = 'article'
+        let catergoryId = parseInt(req.params.id, 10)
+        let resultCategory = await baseModel.getDataByConditions(acticleTable, { CategoryId: catergoryId })
+        if (resultCategory.length == 0) return { status: HttpStatusCode.BAD_REQUEST, mesage: `Article not found` }
+        return { data: resultCategory }
     } catch (error) {
         return {
             status: HttpStatusCode.BAD_REQUEST,
