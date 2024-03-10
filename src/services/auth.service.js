@@ -26,7 +26,9 @@ const register = async (data) => {
       Password: await bcrypt.hashSync(data.Password, 10),
       DisplayName: data.DisplayName,
       VerifyToken: uuidv4(),
-      Avatar: data.Avatar
+      Avatar: data.Avatar,
+      Phone: data.Phone,
+      BirtDate: data.BirtDate
     };
     // transaction mongodb
     const createdUser = await AuthModel.register(newData);

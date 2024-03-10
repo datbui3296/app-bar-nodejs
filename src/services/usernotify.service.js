@@ -137,9 +137,14 @@ const getUserNotifyByUserId = async (req, res) => {
     try {
         const userId = parseInt(req.params.userId, 10)
         let usernotify = "usernotify"
+        let users = "users"
+        let article = "article"
+        let resultUser  = await baseModel.getDataByConditions(users, {Id: userId})
         let result = await baseModel.getDataByConditions(usernotify, {UserId: userId})
+        let resultArticle  = await baseModel.getDataByConditions(article, {Id: userId})
+        
         return {
-            data: result
+            data: result.map(obj => ({ ...obj, UserName: resultUser[0].UserName, Title :resultArticle[0].Title }))
         }
 
     } catch (error) {

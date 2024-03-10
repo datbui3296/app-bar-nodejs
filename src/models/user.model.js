@@ -11,6 +11,8 @@ const userCollectionSchema = Joi.object({
     UserName: Joi.string().required().trim(), // also ObjectId when create new
     Password: Joi.string().required().trim(),
     DisplayName: Joi.string(),
+    Phone: Joi.string().required().trim(),
+    BirtDate: Joi.date().timestamp().required(),
     Avatar: Joi.string(),
     IsActive: Joi.boolean().default(true),
     VerifyToken: Joi.string(),
