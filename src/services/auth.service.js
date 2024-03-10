@@ -120,6 +120,8 @@ const login = async (data) => {
         UserId: user[0].Id, DisplayName: user[0].DisplayName,
         Role: user[0].Role,
         BirthDate : user[0].BirthDate,
+        AccumulatedPoint: user[0].AccumulatedPoint,
+        AmountSpent:  user[0].AmountSpent,
       }
     };
   } catch (error) {

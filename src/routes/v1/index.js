@@ -7,6 +7,7 @@ const usernotifyRoutes = require("./usernotify.route");
 const notifyTemplateRoutes = require("./notifytemplate.route");
 const bookingRoutes = require("./booking.route");
 const userInvoiceRoutes = require("./notifytemplate.route");
+const notifySendPlanRoutes = require("./notifysendplan.router");
 const HttpStatusCode = require("../../utilities/constants");
 
 
@@ -27,5 +28,6 @@ router.use("/usernotify", usernotifyRoutes);
 router.use("/booking", bookingRoutes);
 router.use("/userinvoice", userInvoiceRoutes);
 router.use("/notifyTemplate", notifyTemplateRoutes);
+router.use("/notifysendplan", notifySendPlanRoutes);
 
 module.exports = router;
