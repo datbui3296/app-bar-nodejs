@@ -13,6 +13,7 @@ router.get("/getArticles/:id",  ArticleController.getArticleById);
 router.delete("/delete/:id",  ArticleController.deleteArticle);
 router.get("/articles/:page/:pageSize", ArticleController.getArticles);
 router.get("/articles", ArticleController.getAllArticle);
+router.get("/getActicleEventOrPreferential/:id", ArticleController.getActicleEventOrPreferential);
 
 
 module.exports = router;
