@@ -156,6 +156,24 @@ const getUserNotifyByUserId = async (req, res) => {
     }
 }
 
+const searchByTitle = async (req, res) => {
+    try {
+        const title = req.params.title
+        let usernotify = "usernotify"
+        let usernotifyByTitle  = await baseModel.getDataByConditions(usernotify, {Title: title})
+        return {
+            data: usernotifyByTitle
+        }
+
+    } catch (error) {
+        return {
+            status: HttpStatusCode.BAD_REQUEST,
+            mesage: error.message
+        }
+
+    }
+}
+
 module.exports = {
     createUserNotify,
     updateUserNotify,
@@ -163,5 +181,6 @@ module.exports = {
     getUserNotifies,
     getUserNotifyById,
     getAllUserNotify,
-    getUserNotifyByUserId
+    getUserNotifyByUserId,
+    searchByTitle
 };

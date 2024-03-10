@@ -67,12 +67,6 @@ const refreshToken = async (req, res) => {
         } else if (result.status == HttpStatusCode.EXPIRED) {
             return res.status(HttpStatusCode.REFRESH_EXPIRED).json(result)
         }
-
-        // xử lý cookie ở đây
-        res.cookie('accessToken', result.data.AccessToken, { httpOnly: true, secure: true, sameSite: 'none', maxAge: ms('12 days') })
-        res.cookie('refreshToken', result.data.RefreshToken, { httpOnly: true, secure: true, sameSite: 'none', maxAge: ms('12 days') })
-        res.cookie('_id', result.data.UserId, { httpOnly: true, secure: true, sameSite: 'none', maxAge: ms('12 days') })
-
         return res.status(HttpStatusCode.OK).json(result)
     } catch (error) {
         res.status(HttpStatusCode.INTERNAL_SERVER).json({

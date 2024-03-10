@@ -68,6 +68,17 @@ const getAllUserNotify = async () => {
     }
 }
 
+const getUserNotifyByTitle = async(title) =>{
+    try {
+        const sql = `SELECT * FROM ${tableUserNotifyName} where Title LIKE '%${title}%'`
+        const result = await getDB.excuteQuery(sql, [title])
+        return result;
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
 
 
 module.exports = {

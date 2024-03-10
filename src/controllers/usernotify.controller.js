@@ -95,6 +95,19 @@ const getUserNotifieByUserId = async (req, res) => {
     }
 }
 
+const searchByTitle = async(req, res ) =>{
+    try {
+        const result = await UserNotifyService.searchByTitle(req, res);
+        return res.status(HttpStatusCode.OK).json({ data: result?.data })
+
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            message: error.message
+        })
+
+    }
+}
+
 module.exports = {
     createUserNotify,
     getUserNotifies,
@@ -102,6 +115,7 @@ module.exports = {
     updateUserNotify,
     deleteUserNotify,
     getAllUserNotifies,
-    getUserNotifieByUserId
+    getUserNotifieByUserId,
+    searchByTitle
 
 }
