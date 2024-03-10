@@ -79,9 +79,9 @@ const verifyToken = async (data, res) => {
 
 const login = async (data) => {
   try {
-    const user = await AuthModel.findOneByUsername(data.UserName);
-    if (!user) {
-      throw new Error("Incorrect username or password");
+    const phone = await AuthModel.findOneByPhone(data.Phone);
+    if (!phone) {
+      throw new Error("Incorrect phone or password");
       //return { stt: false, msg: 'Incorrect username or password' }
     }
     const isCheckPassword = await bcrypt.compareSync(
@@ -123,7 +123,7 @@ const login = async (data) => {
     return {
       stt: true, msg: "Login Success",
       data: {
-        Email: user[0].Email, UserName: user[0].UserName, AccessToken: accessToken, RefreshToken: refreshToken, UserId: user[0].Id
+        Email: user[0].Email, Phone: user[0].Phone, AccessToken: accessToken, RefreshToken: refreshToken, UserId: user[0].Id
       }
     };
   } catch (error) {
@@ -141,7 +141,7 @@ const refreshToken = async (data) => {
     if (!user) {
       throw new Error("Account not found");
     }
-    let infoUser = { Id: user[0].Id, Email: user[0].Email, UserName: user[0].UserName };
+    let infoUser = { Id: user[0].Id, Email: user[0].Email, Phone: user[0].Phone };
     //return accessToken and refreshToken
     const accessToken = await JwtProvider.generateToken(
       env.ACCESS_TOKEN_PRIVATE_KEY,

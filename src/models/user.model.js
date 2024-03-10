@@ -7,13 +7,10 @@ const baseModel = require('../utilities/BaseModel')
 // Define Users collection
 const userCollectionName = 'users'
 const userCollectionSchema = Joi.object({
-    email: Joi.string().required().trim(), // also ObjectId when create new
-    UserName: Joi.string().required().trim(), // also ObjectId when create new
     Password: Joi.string().required().trim(),
-    DisplayName: Joi.string(),
+    DisplayName: Joi.string().required(),
     Phone: Joi.string().required().trim(),
     BirtDate: Joi.date().timestamp().required(),
-    Avatar: Joi.string(),
     IsActive: Joi.boolean().default(true),
     VerifyToken: Joi.string(),
     // currentRefreshToken: Joi.array(),
@@ -45,10 +42,10 @@ const findOneByEmail = async (email) => {
         throw new Error(error)
     }
 }
-const findOneByUsername = async (username) => {
+const findOneByPhone = async (phone) => {
     try {
-        let sql = `SELECT * FROM users WHERE UserName = ?`
-        let result = await getDB.excuteQuery(sql, [username]);
+        let sql = `SELECT * FROM users WHERE Phone = ?`
+        let result = await getDB.excuteQuery(sql, [phone]);
         return result;
     } catch (error) {
         throw new Error(error)
@@ -96,7 +93,7 @@ const update = async (id, data) => {
 module.exports = {
     userCollectionName,
     findOneByEmail,
-    findOneByUsername,
+    findOneByPhone,
     register,
     update,
     findOneById,
