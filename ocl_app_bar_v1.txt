@@ -1,5 +1,11 @@
 
-CREATE DATABASE ocl_app_bar_v1
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+
 
 CREATE TABLE `article` (
   `Id` int(11) NOT NULL,
@@ -15,14 +21,20 @@ CREATE TABLE `article` (
   `OrderBy` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
+--
+-- Đang đổ dữ liệu cho bảng `article`
+--
 
 INSERT INTO `article` (`Id`, `Title`, `SubTitle`, `SubContent`, `Content`, `CreatedBy`, `Created`, `UpdatedBy`, `Updated`, `Status`, `OrderBy`) VALUES
 (2, 'Title 12', 'SubTitle', 'SubContent', 'Content', 'daibc5135', '2024-03-06 23:36:01', 'daibc5135', '2024-03-06 23:36:01', 'ACTIVE', ''),
 (3, 'Title 123', 'SubTitle', 'SubContent', 'Content', 'daibc5135', '2024-03-06 23:36:11', 'daibc5135', '2024-03-06 23:36:11', 'ACTIVE', ''),
 (4, 'Title  2', 'SubTitle', 'SubContent', 'Content', 'daibc5135', '2024-03-06 23:36:20', 'daibc5135', '2024-03-06 23:36:20', 'ACTIVE', '');
 
+-- --------------------------------------------------------
 
+--
+-- Cấu trúc bảng cho bảng `booking`
+--
 
 CREATE TABLE `booking` (
   `Id` int(11) NOT NULL,
@@ -38,7 +50,9 @@ CREATE TABLE `booking` (
   `Status` varchar(15) NOT NULL DEFAULT 'PENDING' COMMENT 'PENDING, VERRIFY'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
+--
+-- Đang đổ dữ liệu cho bảng `booking`
+--
 
 INSERT INTO `booking` (`Id`, `NotifyId`, `SuKien`, `BookDate`, `Quantity`, `IsDeleted`, `CreatedBy`, `Created`, `UpdatedBy`, `Updated`, `Status`) VALUES
 (6, 7, 'Thao lay chong', '2024-03-08 03:31:13', 11, 1, NULL, '2024-03-08 03:31:13', NULL, '2024-03-08 03:31:13', 'PENDING'),
@@ -47,6 +61,11 @@ INSERT INTO `booking` (`Id`, `NotifyId`, `SuKien`, `BookDate`, `Quantity`, `IsDe
 (9, 6, 'Sự kiên ăn cưới huydv 23', '2024-03-08 03:31:59', 10, 0, NULL, '2024-03-08 03:31:59', NULL, '2024-03-08 03:31:59', 'PENDING'),
 (10, 6, 'Sự kiên ăn cưới huydv va T', '2024-03-08 03:32:07', 10, 0, NULL, '2024-03-08 03:32:07', NULL, '2024-03-08 03:32:07', 'PENDING');
 
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `category`
+--
 
 CREATE TABLE `category` (
   `Id` int(11) NOT NULL,
@@ -61,12 +80,19 @@ CREATE TABLE `category` (
   `Updated` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `category`
+--
 
 INSERT INTO `category` (`Id`, `Name`, `Description`, `ParentId`, `OrderBy`, `IsActive`, `CreatedBy`, `Created`, `UpdatedBy`, `Updated`) VALUES
 (5, 'Category 4', 'Category 1', 'ParentId', 'daibc1', 0, 'daibc5135', '2024-03-06 03:00:07', 'daibc5135', '2024-03-06 03:00:07'),
 (6, 'Category 5', 'Category 1', 'ParentId', 'daibc1', 0, 'daibc5135', '2024-03-06 03:00:58', 'daibc5135', '2024-03-06 03:00:58');
 
+-- --------------------------------------------------------
 
+--
+-- Cấu trúc bảng cho bảng `notifysendplan`
+--
 
 CREATE TABLE `notifysendplan` (
   `Id` int(11) NOT NULL,
@@ -75,10 +101,14 @@ CREATE TABLE `notifysendplan` (
   `SendedBy` varchar(50) NOT NULL,
   `IsSend` smallint(6) NOT NULL DEFAULT 0,
   `Sended` varchar(50) NOT NULL,
-  `Receive` varchar(1500) DEFAULT NULL
+  `Receive` mediumtext DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
 
+--
+-- Cấu trúc bảng cho bảng `notifytempalte`
+--
 
 CREATE TABLE `notifytempalte` (
   `Id` int(11) NOT NULL,
@@ -90,7 +120,11 @@ CREATE TABLE `notifytempalte` (
   `Updated` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
 
+--
+-- Cấu trúc bảng cho bảng `userinvoice`
+--
 
 CREATE TABLE `userinvoice` (
   `Id` int(11) NOT NULL,
@@ -106,7 +140,9 @@ CREATE TABLE `userinvoice` (
   `Updated` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
+--
+-- Đang đổ dữ liệu cho bảng `userinvoice`
+--
 
 INSERT INTO `userinvoice` (`Id`, `Total`, `Status`, `IsPaided`, `Paidate`, `PaidBy`, `ReferenceData`, `CreatedBy`, `Created`, `UpdatedBy`, `Updated`) VALUES
 (6, 150000000, 0, 0, '2024-03-08 04:45:50', 'daibc12', 7, NULL, '2024-03-08 04:45:50', '', '2024-03-08 04:45:50'),
@@ -114,7 +150,11 @@ INSERT INTO `userinvoice` (`Id`, `Total`, `Status`, `IsPaided`, `Paidate`, `Paid
 (8, 150000000, 0, 0, '2024-03-08 04:46:30', 'daibc12', 7, NULL, '2024-03-08 04:46:30', '', '2024-03-08 04:46:30'),
 (9, 150000000, 0, 0, '2024-03-08 04:46:31', 'daibc12', 7, NULL, '2024-03-08 04:46:31', '', '2024-03-08 04:46:31');
 
+-- --------------------------------------------------------
 
+--
+-- Cấu trúc bảng cho bảng `usernotify`
+--
 
 CREATE TABLE `usernotify` (
   `Id` int(11) NOT NULL,
@@ -127,13 +167,20 @@ CREATE TABLE `usernotify` (
   `IsRead` smallint(6) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `usernotify`
+--
 
 INSERT INTO `usernotify` (`Id`, `UserId`, `Title`, `Content`, `ArticleId`, `SendedBy`, `Sended`, `IsRead`) VALUES
 (6, 9, 'Title  7', 'Content', 1, 'daibc5135', '2024-03-08 02:28:54', 0),
 (7, 9, 'Title  8', 'Content', 1, 'daibc5135', '2024-03-08 02:30:02', 0),
 (8, 10, 'Title  10', 'Content', 1, 'daibc5135', '2024-03-08 02:30:55', 0);
 
+-- --------------------------------------------------------
 
+--
+-- Cấu trúc bảng cho bảng `users`
+--
 
 CREATE TABLE `users` (
   `Id` int(11) NOT NULL COMMENT 'Id user',
@@ -149,16 +196,24 @@ CREATE TABLE `users` (
   `TotalAmount` int(250) DEFAULT NULL,
   `ResetToken` varchar(250) DEFAULT NULL,
   `ResetTokenExpery` varchar(250) DEFAULT NULL,
-  `CreatedAt` datetime NOT NULL DEFAULT current_timestamp(),
-  `UpdatedAt` datetime NOT NULL DEFAULT current_timestamp()
+  `Created` datetime NOT NULL DEFAULT current_timestamp(),
+  `Updated` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `users`
+--
 
-INSERT INTO `users` (`Id`, `UserName`, `Password`, `DisplayName`, `Avatar`, `Email`, `IsActive`, `VerifyToken`, `Point`, `Level`, `TotalAmount`, `ResetToken`, `ResetTokenExpery`, `CreatedAt`, `UpdatedAt`) VALUES
+INSERT INTO `users` (`Id`, `UserName`, `Password`, `DisplayName`, `Avatar`, `Email`, `IsActive`, `VerifyToken`, `Point`, `Level`, `TotalAmount`, `ResetToken`, `ResetTokenExpery`, `Created`, `Updated`) VALUES
 (9, 'daibc5135', '$2a$10$a49.DCzjR26Qv/086SoeYOQroRegbgFiLvrBclK4PwhDM0lc68QLW', 'daibco', 'http://localhost:3000/images/665fdfff72e08d31c2444ad00a0040e9.jpg', 'datbui3296@gmail.com', 0, 'cd37f11f-3bb5-45fa-8d4f-b455d0c979ee', NULL, NULL, NULL, NULL, '1709843032747', '2024-03-06 00:21:46', '2024-03-06 00:21:46'),
 (10, 'daibc51356', '$2a$10$EqiAzhyroui44he7BPvQTOAPLajmGGIrm9ZTED0fxjo7BxN07/7Bi', 'daibco', 'http://localhost:3000/images/665fdfff72e08d31c2444ad00a0040e9.jpg', 'dai123456@gmail.com', 0, '20d6fc02-9ddd-4cf9-8e9e-19775b4e6f2e', NULL, NULL, NULL, NULL, NULL, '2024-03-06 00:23:30', '2024-03-06 00:23:30'),
 (11, 'daibc5', '$2a$10$/4lZh/nxyRFyNk7JMePrgOBY21gZJQ4H9edeQXTfNmIn6zulI4bpq', 'daibco', 'http://localhost:3000/images/f716f24124d69ad185e9d17584a281aa.png', 'dai234@gmail.com', 0, 'e00ac106-4c25-48ec-a5aa-357bab162831', NULL, NULL, NULL, NULL, NULL, '2024-03-06 00:24:24', '2024-03-06 00:24:24');
 
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `usertoken`
+--
 
 CREATE TABLE `usertoken` (
   `Id` int(11) NOT NULL,
@@ -168,88 +223,144 @@ CREATE TABLE `usertoken` (
   `UpdatedAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Chỉ mục cho các bảng đã đổ
+--
 
+--
+-- Chỉ mục cho bảng `article`
+--
 ALTER TABLE `article`
   ADD PRIMARY KEY (`Id`);
 
-
+--
+-- Chỉ mục cho bảng `booking`
+--
 ALTER TABLE `booking`
   ADD PRIMARY KEY (`Id`),
   ADD KEY `NotifyId` (`NotifyId`);
 
+--
+-- Chỉ mục cho bảng `category`
+--
 ALTER TABLE `category`
   ADD PRIMARY KEY (`Id`);
 
-
+--
+-- Chỉ mục cho bảng `notifysendplan`
+--
 ALTER TABLE `notifysendplan`
   ADD PRIMARY KEY (`Id`),
   ADD KEY `NotifyTempalteId` (`NotifyTempalteId`);
 
-
+--
+-- Chỉ mục cho bảng `notifytempalte`
+--
 ALTER TABLE `notifytempalte`
   ADD PRIMARY KEY (`Id`);
 
-
+--
+-- Chỉ mục cho bảng `userinvoice`
+--
 ALTER TABLE `userinvoice`
   ADD PRIMARY KEY (`Id`);
 
-
+--
+-- Chỉ mục cho bảng `usernotify`
+--
 ALTER TABLE `usernotify`
   ADD PRIMARY KEY (`Id`);
 
-
+--
+-- Chỉ mục cho bảng `users`
+--
 ALTER TABLE `users`
   ADD PRIMARY KEY (`Id`);
 
-
+--
+-- Chỉ mục cho bảng `usertoken`
+--
 ALTER TABLE `usertoken`
   ADD PRIMARY KEY (`Id`),
   ADD KEY `UserId` (`UserId`);
 
+--
+-- AUTO_INCREMENT cho các bảng đã đổ
+--
 
+--
+-- AUTO_INCREMENT cho bảng `article`
+--
 ALTER TABLE `article`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
-
+--
+-- AUTO_INCREMENT cho bảng `booking`
+--
 ALTER TABLE `booking`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
-
+--
+-- AUTO_INCREMENT cho bảng `category`
+--
 ALTER TABLE `category`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
-
+--
+-- AUTO_INCREMENT cho bảng `notifysendplan`
+--
 ALTER TABLE `notifysendplan`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
-
+--
+-- AUTO_INCREMENT cho bảng `notifytempalte`
+--
 ALTER TABLE `notifytempalte`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
-
+--
+-- AUTO_INCREMENT cho bảng `userinvoice`
+--
 ALTER TABLE `userinvoice`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
-
+--
+-- AUTO_INCREMENT cho bảng `usernotify`
+--
 ALTER TABLE `usernotify`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
-
+--
+-- AUTO_INCREMENT cho bảng `users`
+--
 ALTER TABLE `users`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id user', AUTO_INCREMENT=12;
 
+--
+-- AUTO_INCREMENT cho bảng `usertoken`
+--
 ALTER TABLE `usertoken`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
+--
+-- Các ràng buộc cho các bảng đã đổ
+--
 
+--
+-- Các ràng buộc cho bảng `booking`
+--
 ALTER TABLE `booking`
   ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`NotifyId`) REFERENCES `usernotify` (`Id`);
 
-
+--
+-- Các ràng buộc cho bảng `notifysendplan`
+--
 ALTER TABLE `notifysendplan`
   ADD CONSTRAINT `notifysendplan_ibfk_1` FOREIGN KEY (`NotifyTempalteId`) REFERENCES `notifytempalte` (`Id`);
 
-
+--
+-- Các ràng buộc cho bảng `usertoken`
+--
 ALTER TABLE `usertoken`
   ADD CONSTRAINT `usertoken_ibfk_1` FOREIGN KEY (`UserId`) REFERENCES `users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
