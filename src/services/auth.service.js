@@ -122,6 +122,7 @@ const login = async (data) => {
         BirthDate : user[0].BirthDate,
         AccumulatedPoint: user[0].AccumulatedPoint,
         AmountSpent:  user[0].AmountSpent,
+        Avatar: user[0].Avatar,
       }
     };
   } catch (error) {
