@@ -69,8 +69,8 @@ const verifyToken = async (data, res) => {
 
 const login = async (data) => {
   try {
-    const phone = await AuthModel.findOneByPhone(data.Phone);
-    if (!phone) {
+    const user = await AuthModel.findOneByPhone(data.Phone);
+    if (!user) {
       throw new Error("User Not Found");
       //return { stt: false, msg: 'Incorrect username or password' }
     }
@@ -108,10 +108,10 @@ const login = async (data) => {
     }
 
     let result = await AuthModel.createUserLogin(dataCreateUserToken);
-    if (result.length == 0) return { stt: false, msg: "Not create table userlogin" }
+    if (result.length == 0) return { mesage: "Login not success" }
 
     return {
-      message: "Login Successfully",
+      message: "Login successfully",
       data: {
         Email: user[0].Email, Phone: user[0].Phone, AccessToken: accessToken, RefreshToken: refreshToken, UserId: user[0].Id
       }

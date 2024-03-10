@@ -53,7 +53,7 @@ const verify = async (req, res, next) => {
 
 const login = async (req, res, next) => {
     const condition = Joi.object({
-        UserName: Joi.string().required().trim(),
+        Phone: Joi.string().required().trim(),
         Password: Joi.string().required().trim()
     })
     try {
