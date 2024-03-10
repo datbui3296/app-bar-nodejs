@@ -25,5 +25,6 @@ router.use("/article", articlrRoutes);
 router.use("/usernotify", usernotifyRoutes);
 router.use("/booking", bookingRoutes);
 router.use("/userinvoice", userInvoiceRoutes);
+router.use("/userinvoice", userInvoiceRoutes);
 
 module.exports = router;

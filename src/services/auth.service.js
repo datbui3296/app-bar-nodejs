@@ -15,9 +15,9 @@ const createTransporterMail = createTransporter()
 
 const register = async (data) => {
   try {
-    const existUser = await AuthModel.findOneByEmail(data.Email);
-    if (existUser.length > 0) {
-      throw new Error("Email already exists");
+    const phones = await AuthModel.findOneByPhone(data.Phone);
+    if (phones.length > 0) {
+      throw new Error("Phone already exists");
     }
     //const nameFromEmail = data.email.split('@')[0] || ''
     const newData = {
