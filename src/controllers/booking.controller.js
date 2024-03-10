@@ -6,7 +6,7 @@ const createUserBooking = async (req, res) => {
     try {
 
         const result = await BookingService.createUserBooking(req, res);
-        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ message: result?.message })
+        return res.status(HttpStatusCode.OK).json({status: result?.status, message: result?.message })
 
     } catch (error) {
         return res.status(HttpStatusCode.INTERNAL_SERVER).json({
@@ -20,7 +20,7 @@ const updateUserBooking = async (req, res) => {
     try {
 
         const result = await BookingService.updateUserBooking(req, res);
-        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ message: result?.message })
+        return res.status(HttpStatusCode.OK).json({status: result?.status, message: result?.message })
     } catch (error) {
         return res.status(HttpStatusCode.INTERNAL_SERVER).json({
             message: error.message
@@ -33,7 +33,7 @@ const deleteUserBooking = async (req, res) => {
     try {
 
         const result = await BookingService.deleteUserBooking(req, res);
-        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ message: result?.message })
+        return res.status(HttpStatusCode.OK).json({status: result?.status, message: result?.message })
     } catch (error) {
         return res.status(HttpStatusCode.INTERNAL_SERVER).json({
             message: error.message
@@ -45,7 +45,7 @@ const deleteUserBooking = async (req, res) => {
 const vertifyUserBooking = async (req, res) => {
     try {
         const result = await BookingService.vertifyUserBooking(req, res);
-        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ message: result?.message })
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({status: result?.status, message: result?.message })
 
     } catch (error) {
         res.status(HttpStatusCode.INTERNAL_SERVER).json({

@@ -11,7 +11,7 @@ const createUserBooking = async (req) => {
         const res = await bookingModel.createUserBooking(req.body)
         if (res) {
             return {
-                status: HttpStatusCode.OK,
+                status: 1,
                 message: `Bookking create successfuly`,
                 data: res
             }
@@ -31,12 +31,14 @@ const updateUserBooking = async (req) => {
         let bookings = await bookingModel.getBookingById(id)
         if (bookings.length == 0) {
             return {
+                status: 0,
                 message: `Bookking not found`
             }
         }
         let res = await bookingModel.updateUserBooking(req.body, id)
         if (res.affectedRows > 0) {
             return {
+                status: 1,
                 message: `Bookking update successfuly`,
             }
         }
@@ -55,7 +57,7 @@ const deleteUserBooking = async (req) => {
         let bookingDelete = await bookingModel.deleteUserBooking(id)
         if (bookingDelete.affectedRows > 0) {
             return {
-                status: HttpStatusCode.OK,
+                status: 1,
                 message: `Bookking delete sucessfuly`,
             }
         }
@@ -75,14 +77,14 @@ const vertifyUserBooking = async (req) => {
         let booking = await bookingModel.getBookingById(id)
         if(booking?.length > 0 && booking[0]?.Status == 'VERRIFY'){
             return {
-                status: HttpStatusCode.OK,
-                message: `Bookking is vertify`,
+                status: 0,
+                message: `Bookking is not vertify`,
             }
         }
         let bookingVertify = await bookingModel.vertifyUserBooking(id)
         if (bookingVertify.affectedRows > 0) {
             return {
-                status: HttpStatusCode.OK,
+                status: 1,
                 message: `Bookking vertify sucessfuly`,
             }
         }
