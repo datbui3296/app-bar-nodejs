@@ -64,7 +64,7 @@ const getAllWithPagination = async (page, pageSize, tableName) => {
     const countSql = `SELECT count(*) as count FROM ${tableName}`;
     let resultCount = await database.excuteQuery(countSql);
     let count = resultCount[0]?.count;
-    let objectPage = { page, pageSize, count };
+    let objectPage = { page, pageSize, totalItems: count, totalPages: Math.ceil(count / pageSize)};
     const sql = `SELECT * FROM ${tableName} LIMIT ?, ?`;
     const values = [offset, pageSize];
     const result = await database.excuteQuery(sql, values);
