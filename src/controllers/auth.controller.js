@@ -9,7 +9,7 @@ const fs = require("fs")
 const register = async (req, res) => {
     try {
         const result = await AuthService.register(req.body)
-        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ status: result?.status, message: result?.message, data: result?.data })
+        return res.status(HttpStatusCode.OK).json({ status: result?.status, message: result?.message, data: result?.data })
 
     } catch (error) {
         res.status(HttpStatusCode.INTERNAL_SERVER).json({
