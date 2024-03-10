@@ -1,12 +1,4 @@
 
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-
-
 CREATE TABLE `article` (
   `Id` int(11) NOT NULL,
   `Title` varchar(250) NOT NULL,
@@ -55,11 +47,7 @@ CREATE TABLE `booking` (
 --
 
 INSERT INTO `booking` (`Id`, `NotifyId`, `SuKien`, `BookDate`, `Quantity`, `IsDeleted`, `CreatedBy`, `Created`, `UpdatedBy`, `Updated`, `Status`) VALUES
-(6, 7, 'Thao lay chong', '2024-03-08 03:31:13', 11, 1, NULL, '2024-03-08 03:31:13', NULL, '2024-03-08 03:31:13', 'PENDING'),
-(7, 6, 'Sự kiên ăn cưới huydv', '2024-03-08 03:31:40', 10, 0, NULL, '2024-03-08 03:31:40', NULL, '2024-03-08 03:31:40', 'VERRIFY'),
-(8, 6, 'Sự kiên ăn cưới huydv 2', '2024-03-08 03:31:55', 10, 0, NULL, '2024-03-08 03:31:55', NULL, '2024-03-08 03:31:55', 'VERRIFY'),
-(9, 6, 'Sự kiên ăn cưới huydv 23', '2024-03-08 03:31:59', 10, 0, NULL, '2024-03-08 03:31:59', NULL, '2024-03-08 03:31:59', 'PENDING'),
-(10, 6, 'Sự kiên ăn cưới huydv va T', '2024-03-08 03:32:07', 10, 0, NULL, '2024-03-08 03:32:07', NULL, '2024-03-08 03:32:07', 'PENDING');
+(6, 7, 'Thao lay chong', '2024-03-08 03:31:13', 11, 1, NULL, '2024-03-08 03:31:13', NULL, '2024-03-08 03:31:13', 'PENDING');
 
 -- --------------------------------------------------------
 
@@ -172,7 +160,6 @@ CREATE TABLE `usernotify` (
 --
 
 INSERT INTO `usernotify` (`Id`, `UserId`, `Title`, `Content`, `ArticleId`, `SendedBy`, `Sended`, `IsRead`) VALUES
-(6, 9, 'Title  7', 'Content', 1, 'daibc5135', '2024-03-08 02:28:54', 0),
 (7, 9, 'Title  8', 'Content', 1, 'daibc5135', '2024-03-08 02:30:02', 0),
 (8, 10, 'Title  10', 'Content', 1, 'daibc5135', '2024-03-08 02:30:55', 0);
 
@@ -184,11 +171,13 @@ INSERT INTO `usernotify` (`Id`, `UserId`, `Title`, `Content`, `ArticleId`, `Send
 
 CREATE TABLE `users` (
   `Id` int(11) NOT NULL COMMENT 'Id user',
-  `UserName` varchar(250) NOT NULL,
+  `UserName` varchar(250) DEFAULT NULL,
   `Password` varchar(250) NOT NULL,
   `DisplayName` varchar(250) NOT NULL,
   `Avatar` varchar(10000) DEFAULT NULL,
+  `Phone` varchar(13) NOT NULL,
   `Email` varchar(250) DEFAULT NULL,
+  `BirthDate` date NOT NULL DEFAULT current_timestamp(),
   `IsActive` smallint(6) NOT NULL,
   `VerifyToken` varchar(250) NOT NULL,
   `Point` int(50) DEFAULT NULL,
@@ -204,10 +193,10 @@ CREATE TABLE `users` (
 -- Đang đổ dữ liệu cho bảng `users`
 --
 
-INSERT INTO `users` (`Id`, `UserName`, `Password`, `DisplayName`, `Avatar`, `Email`, `IsActive`, `VerifyToken`, `Point`, `Level`, `TotalAmount`, `ResetToken`, `ResetTokenExpery`, `Created`, `Updated`) VALUES
-(9, 'daibc5135', '$2a$10$a49.DCzjR26Qv/086SoeYOQroRegbgFiLvrBclK4PwhDM0lc68QLW', 'daibco', 'http://localhost:3000/images/665fdfff72e08d31c2444ad00a0040e9.jpg', 'datbui3296@gmail.com', 0, 'cd37f11f-3bb5-45fa-8d4f-b455d0c979ee', NULL, NULL, NULL, NULL, '1709843032747', '2024-03-06 00:21:46', '2024-03-06 00:21:46'),
-(10, 'daibc51356', '$2a$10$EqiAzhyroui44he7BPvQTOAPLajmGGIrm9ZTED0fxjo7BxN07/7Bi', 'daibco', 'http://localhost:3000/images/665fdfff72e08d31c2444ad00a0040e9.jpg', 'dai123456@gmail.com', 0, '20d6fc02-9ddd-4cf9-8e9e-19775b4e6f2e', NULL, NULL, NULL, NULL, NULL, '2024-03-06 00:23:30', '2024-03-06 00:23:30'),
-(11, 'daibc5', '$2a$10$/4lZh/nxyRFyNk7JMePrgOBY21gZJQ4H9edeQXTfNmIn6zulI4bpq', 'daibco', 'http://localhost:3000/images/f716f24124d69ad185e9d17584a281aa.png', 'dai234@gmail.com', 0, 'e00ac106-4c25-48ec-a5aa-357bab162831', NULL, NULL, NULL, NULL, NULL, '2024-03-06 00:24:24', '2024-03-06 00:24:24');
+INSERT INTO `users` (`Id`, `UserName`, `Password`, `DisplayName`, `Avatar`, `Phone`, `Email`, `BirthDate`, `IsActive`, `VerifyToken`, `Point`, `Level`, `TotalAmount`, `ResetToken`, `ResetTokenExpery`, `Created`, `Updated`) VALUES
+(9, 'daibc5135', '$2a$10$a49.DCzjR26Qv/086SoeYOQroRegbgFiLvrBclK4PwhDM0lc68QLW', 'daibco', 'http://localhost:3000/images/665fdfff72e08d31c2444ad00a0040e9.jpg', '', 'datbui3296@gmail.com', '2024-03-10', 0, 'cd37f11f-3bb5-45fa-8d4f-b455d0c979ee', NULL, NULL, NULL, NULL, '1709843032747', '2024-03-06 00:21:46', '2024-03-06 00:21:46'),
+(10, 'daibc51356', '$2a$10$EqiAzhyroui44he7BPvQTOAPLajmGGIrm9ZTED0fxjo7BxN07/7Bi', 'daibco', 'http://localhost:3000/images/665fdfff72e08d31c2444ad00a0040e9.jpg', '', 'dai123456@gmail.com', '2024-03-10', 0, '20d6fc02-9ddd-4cf9-8e9e-19775b4e6f2e', NULL, NULL, NULL, NULL, NULL, '2024-03-06 00:23:30', '2024-03-06 00:23:30'),
+(11, 'daibc5', '$2a$10$/4lZh/nxyRFyNk7JMePrgOBY21gZJQ4H9edeQXTfNmIn6zulI4bpq', 'daibco', 'http://localhost:3000/images/f716f24124d69ad185e9d17584a281aa.png', '', 'dai234@gmail.com', '2024-03-10', 0, 'e00ac106-4c25-48ec-a5aa-357bab162831', NULL, NULL, NULL, NULL, NULL, '2024-03-06 00:24:24', '2024-03-06 00:24:24');
 
 -- --------------------------------------------------------
 
@@ -238,7 +227,7 @@ ALTER TABLE `article`
 --
 ALTER TABLE `booking`
   ADD PRIMARY KEY (`Id`),
-  ADD KEY `NotifyId` (`NotifyId`);
+  ADD KEY `fk_constraint_booking` (`NotifyId`);
 
 --
 -- Chỉ mục cho bảng `category`
@@ -350,7 +339,7 @@ ALTER TABLE `usertoken`
 -- Các ràng buộc cho bảng `booking`
 --
 ALTER TABLE `booking`
-  ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`NotifyId`) REFERENCES `usernotify` (`Id`);
+  ADD CONSTRAINT `fk_constraint_booking` FOREIGN KEY (`NotifyId`) REFERENCES `usernotify` (`Id`) ON DELETE CASCADE;
 
 --
 -- Các ràng buộc cho bảng `notifysendplan`
