@@ -17,16 +17,18 @@ const register = async (data) => {
   try {
     const phones = await AuthModel.findOneByPhone(data.Phone);
     if (phones.length > 0) {
-      throw new Error("Phone already exists");
+      return {
+        status: HttpStatusCode.NOT_FOUND,
+        message: "User is exirt!"
+      }
     }
     //const nameFromEmail = data.email.split('@')[0] || ''
     const newData = {
-      Email: data.Email,
-      UserName: data.UserName,
+      Email: data?.Email ?? "",
+      UserName: data?.UserName ?? "",
       Password: await bcrypt.hashSync(data.Password, 10),
       DisplayName: data.DisplayName,
       VerifyToken: uuidv4(),
-      Avatar: data.Avatar,
       Phone: data.Phone,
       BirthDate: data.BirthDate
     };
@@ -34,28 +36,16 @@ const register = async (data) => {
     const createdUser = await AuthModel.register(newData);
     let getUsers = await AuthModel.findOneById(createdUser.id);
     let user = getUsers[0]
-
-    //Gửi email xác thực người dùng
-    // const verifyLocationLink = `${WebsiteDomain}/verify?email=${getUser.email}&verifyToken=${getUser.verifyToken}`
-    // await SendInBlueProvider.sendEmailVerify(
-    //     data.email,
-    //     'Confirm trello account registration',
-    //     `
-    //         <h1>Finish creating your account</h1>
-    //         <div style="margin-bottom: 30px">Hey there</div>
-    //         <div style="margin-bottom: 30px">Your email address has been registered with Sendinblue. To validate your account and activate your ability to send email campaigns, please complete your profile by clicking the link below: web browser.</div>
-    //         <div style="margin: 30px auto">
-    //             <a style="display:inline-block;font-size:18px;font-family:'Open Sans','Arial',Helvetica,sans-serif;color:#ffffff;font-weight:normal;padding: 10px 20px;background-color:#0092ff;border-radius:15px;color:#ffffff;font-weight:normal" href="${verifyLocationLink}">Confirm my email address</a>
-    //         </div>
-    //     `
-    // )
-    // return pick(getUser, ['Email', 'Username', 'DisplayName', 'UpdatedAt', 'CreatedAt', 'Avatar', 'IsActive'])
     let dataRes = {
-      UserName: user.UserName,
+      Phone: user.Phone,
       DisplayName: user.DisplayName,
-      Email: user.Email,
+      UserId: user.Id,
     };
-    return dataRes
+    return {
+      status: HttpStatusCode.OK,
+      message: "User create successfully!",
+      data: dataRes
+    }
   } catch (error) {
     throw new Error(error);
   }
@@ -81,7 +71,7 @@ const login = async (data) => {
   try {
     const phone = await AuthModel.findOneByPhone(data.Phone);
     if (!phone) {
-      throw new Error("Incorrect phone or password");
+      throw new Error("User Not Found");
       //return { stt: false, msg: 'Incorrect username or password' }
     }
     const isCheckPassword = await bcrypt.compareSync(
@@ -121,7 +111,7 @@ const login = async (data) => {
     if (result.length == 0) return { stt: false, msg: "Not create table userlogin" }
 
     return {
-      stt: true, msg: "Login Success",
+      message: "Login Successfully",
       data: {
         Email: user[0].Email, Phone: user[0].Phone, AccessToken: accessToken, RefreshToken: refreshToken, UserId: user[0].Id
       }

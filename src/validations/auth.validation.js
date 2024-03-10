@@ -7,7 +7,7 @@ const { USERNAME_RULE, EMAIL_RULE, PASSWORD_RULE }  = require('../utilities/vali
 const register = async (req, res, next) => {
     const condition = Joi.object({
         // Email: Joi.string().pattern(EMAIL_RULE).message('Email is invalid').trim(),
-        Password: Joi.string().required().pattern(PASSWORD_RULE).message('Password is invalid').trim(),
+        Password: Joi.string().required().trim(),
         DisplayName: Joi.string().required().trim(),
         Phone: Joi.string().required().trim(),
         BirthDate: Joi.date().timestamp().required(),
