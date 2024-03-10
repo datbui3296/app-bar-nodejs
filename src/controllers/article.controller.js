@@ -5,7 +5,8 @@ const ms = require("ms");
 const createArticle = async (req, res) => {
     try {
         const result = await articleService.createArticle(req, res);
-        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ message: result?.message })
+        if (result)
+            return res.status(HttpStatusCode.OK).json({ message: result?.message, data: result?.deleteArticle })
 
     } catch (error) {
         res.status(HttpStatusCode.INTERNAL_SERVER).json({
@@ -79,12 +80,26 @@ const getAllArticle = async (req, res) => {
     }
 }
 
+const getActicleEventOrPreferential = async(req, res) => {
+    try {
+        const result = await articleService.getActicleEventOrPreferential(req, res);
+        return res.status(HttpStatusCode.OK).json({status: result?.status, data: result?.data })
+
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            message: error.message
+        })
+
+    }
+}
+
 module.exports = {
     createArticle,
     updateArticle,
     deleteArticle,
     getArticleById,
     getArticles,
-    getAllArticle
+    getAllArticle,
+    getActicleEventOrPreferential
 
 }

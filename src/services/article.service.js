@@ -4,6 +4,8 @@ const { v4: uuidv4 } = require("uuid");
 const { pick } = require("lodash");
 const env = require("../config/environtment");
 const { HttpStatusCode } = require("../../src/utilities/constants");
+const path = require("path");
+const { error } = require("console");
 
 const createArticle = async (req) => {
     try {
@@ -15,13 +17,30 @@ const createArticle = async (req) => {
                 message: `Article is exirst`
             }
         }
-
-        const res = await articleModel.createArticle(req.body)
-        if (res) {
+        if (req.files != null) {
+            const file = req.files.file;
+            const fileSize = file?.data?.length;
+            const ext = path.extname(file.name);
+            const fileName = file.md5 + ext;
+            const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+            const allowedType = ['.png', '.jpg', '.jpeg'];
+            if (!allowedType.includes(ext.toLowerCase())) return res.status(HttpStatusCode.INVALID_IMAGE).json({ mesage: "Invalid Images" });
+            if (fileSize > 5000000) return res.status(HttpStatusCode.INVALID_IMAGE).json({ mesage: "Image must be less than 5 MB" });
+            file.mv(`./src/uploads/${fileName}`).then((error, data) => {
+                if (error) return {
+                    status: HttpStatusCode.BAD_REQUEST,
+                    message: `Upload file false`,
+                    data: updateRes
+                }
+            })
+            req.body = { ...req.body, Image: url }
+        }
+        let updateRes = await articleModel.createArticle(req.body)
+        if (updateRes) {
             return {
                 status: HttpStatusCode.OK,
                 message: `Article create successfuly`,
-                data: res
+                data: updateRes
             }
         }
 
@@ -42,6 +61,25 @@ const updateArticle = async (req) => {
                 message: `Article not found`
             }
         }
+        if (req.files != null) {
+            const file = req.files.file;
+            const fileSize = file?.data?.length;
+            const ext = path.extname(file?.name);
+            const fileName = file?.md5 + ext;
+            const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+            const allowedType = ['.png', '.jpg', '.jpeg'];
+            if (!allowedType.includes(ext.toLowerCase())) return res.status(HttpStatusCode.INVALID_IMAGE).json({ mesage: "Invalid Images" });
+            if (fileSize > 5000000) return res.status(HttpStatusCode.INVALID_IMAGE).json({ mesage: "Image must be less than 5 MB" });
+            file.mv(`./src/uploads/${fileName}`).then((error, data) => {
+                if (error) return {
+                    status: HttpStatusCode.BAD_REQUEST,
+                    message: `Upload file false`,
+                    data: updateRes
+                }
+            })
+            req.body = { ...req.body, Image: url }
+        }
+
         let res = await articleModel.updateArticle(req.body, id)
         if (res.affectedRows > 0) {
             return {
@@ -132,11 +170,26 @@ const getAllArticle = async (req, res) => {
     }
 }
 
+const getActicleEventOrPreferential = async (req) => {
+    try {
+        let catergoryId =  parseInt(req.params.id, 10)
+        let resultCategory = await baseModel.getDataByConditions(users, { CategoryId: catergoryId })
+        if(resultCategory.length == 0) return {status: HttpStatusCode.BAD_REQUEST, mesage: `Article not found`}
+        return resultCategory
+    } catch (error) {
+        return {
+            status: HttpStatusCode.BAD_REQUEST,
+            mesage: error.message
+        }
+    }
+}
+
 module.exports = {
     createArticle,
     updateArticle,
     deleteArticle,
     getArticles,
     getArticleById,
-    getAllArticle
+    getAllArticle,
+    getActicleEventOrPreferential
 };

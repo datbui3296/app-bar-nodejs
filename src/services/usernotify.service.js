@@ -9,7 +9,7 @@ const baseModel = require('../utilities/BaseModel')
 const createUserNotify = async (req) => {
     try {
         let title = req.body.Title;
-        const userNotifies  = await userNotifyModel.getUserNotifyByName(title)
+        const userNotifies = await userNotifyModel.getUserNotifyByName(title)
         if (userNotifies.length > 0) {
             return {
                 status: HttpStatusCode.NOT_FOUND,
@@ -139,12 +139,12 @@ const getUserNotifyByUserId = async (req, res) => {
         let usernotify = "usernotify"
         let users = "users"
         let article = "article"
-        let resultUser  = await baseModel.getDataByConditions(users, {Id: userId})
-        let result = await baseModel.getDataByConditions(usernotify, {UserId: userId})
-        let resultArticle  = await baseModel.getDataByConditions(article, {Id: userId})
-        
+        let resultUser = await baseModel.getDataByConditions(users, { Id: userId })
+        let result = await baseModel.getDataByConditions(usernotify, { UserId: userId })
+        let resultArticle = await baseModel.getDataByConditions(article, { Id: userId })
+
         return {
-            data: result.map(obj => ({ ...obj, UserName: resultUser[0].UserName, Title :resultArticle[0].Title }))
+            data: result.map(obj => ({ ...obj, UserName: resultUser[0].UserName, Title: resultArticle[0].Title }))
         }
 
     } catch (error) {
@@ -156,23 +156,6 @@ const getUserNotifyByUserId = async (req, res) => {
     }
 }
 
-const searchByTitle = async (req, res) => {
-    try {
-        const title = req.params.title
-        let usernotify = "usernotify"
-        let usernotifyByTitle  = await baseModel.getDataByConditions(usernotify, {Title: title})
-        return {
-            data: usernotifyByTitle
-        }
-
-    } catch (error) {
-        return {
-            status: HttpStatusCode.BAD_REQUEST,
-            mesage: error.message
-        }
-
-    }
-}
 
 module.exports = {
     createUserNotify,
@@ -181,6 +164,5 @@ module.exports = {
     getUserNotifies,
     getUserNotifyById,
     getAllUserNotify,
-    getUserNotifyByUserId,
-    searchByTitle
+    getUserNotifyByUserId
 };

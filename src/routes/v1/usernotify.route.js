@@ -10,7 +10,6 @@ router.delete("/delete/:id",  UserNotifyController.deleteUserNotify);
 router.get("/UserNotifies/:page/:pageSize", UserNotifyController.getUserNotifies);
 router.get("/UserNotifies", UserNotifyController.getAllUserNotifies);
 router.get("/getUserNotifieByUserId/:userId", UserNotifyController.getUserNotifieByUserId);
-router.get("/getUserNotifieByTitle/:title", UserNotifyController.searchByTitle);
 
 
 module.exports = router;

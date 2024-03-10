@@ -115,7 +115,11 @@ const login = async (data) => {
       status: 1,
       message: "Login successfully",
       data: {
-        Email: user[0].Email, Phone: user[0].Phone, AccessToken: accessToken, RefreshToken: refreshToken, UserId: user[0].Id,DisplayName: user[0].DisplayName
+        Email: user[0].Email, Phone: user[0].Phone,
+        AccessToken: accessToken, RefreshToken: refreshToken,
+        UserId: user[0].Id, DisplayName: user[0].DisplayName,
+        Role: user[0].Role,
+        BirthDate : user[0].BirthDate,
       }
     };
   } catch (error) {
@@ -309,30 +313,23 @@ const update = async (req) => {
     const user = await AuthModel.findOneById(userId);
     if (!user) {
       return { status: 0, message: 'User not found' }
-    } if (req.files == null) return res.status(HttpStatusCode.BAD_REQUEST).json({ message: `No File Uploaded` });
-    const file = req.files.file;
-    const fileSize = file?.data?.length;
-    const ext = path.extname(file.name);
-    const fileName = file.md5 + ext;
-    const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
-    const allowedType = ['.png', '.jpg', '.jpeg'];
-    if (!allowedType.includes(ext.toLowerCase())) return res.status(HttpStatusCode.INVALID_IMAGE).json({ mesage: "Invalid Images" });
-    if (fileSize > 5000000) return res.status(HttpStatusCode.INVALID_IMAGE).json({ mesage: "Image must be less than 5 MB" });
-    await file.mv(`./src/uploads/${fileName}`, async (err) => {
-      if (err) return res.status(HttpStatusCode.INTERNAL_SERVER).json({ msg: err.message });
-      try {
-        let data = { ...req.body, Avatar: url }
-        let updateRes = await AuthModel.update(userId, data)
-        if (updateRes.affectedRows > 0) {
-          checkSucess = true
-        }
-
-      } catch (error) {
-        console.log(error.message);
-      }
-    })
-    if (checkSucess) {
-      return { status: 1, message: 'User update successfuly' }
+    } if (req.files != null) {
+      const file = req.files.file;
+      const fileSize = file?.data?.length;
+      const ext = path.extname(file.name);
+      const fileName = file.md5 + ext;
+      const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+      const allowedType = ['.png', '.jpg', '.jpeg'];
+      if (!allowedType.includes(ext.toLowerCase())) return res.status(HttpStatusCode.INVALID_IMAGE).json({ mesage: "Invalid Images" });
+      if (fileSize > 5000000) return res.status(HttpStatusCode.INVALID_IMAGE).json({ mesage: "Image must be less than 5 MB" });
+      await file.mv(`./src/uploads/${fileName}`, async (err) => {
+        if (err) return { status: HttpStatusCode.BAD_REQUEST, message: err.message }
+      })
+      req.body = { ...req.body, Avatar: url }
+    }
+    let updateRes = await AuthModel.update(userId, req.body)
+    if (updateRes.affectedRows > 0) {
+      return { status: HttpStatusCode.OK, message: `Update user successfully` }
     }
 
   } catch (error) {

@@ -10,7 +10,7 @@ const register = async (req, res, next) => {
         Password: Joi.string().required().trim(),
         DisplayName: Joi.string().required().trim(),
         Phone: Joi.string().required().trim(),
-        BirthDate: Joi.date().timestamp().required(),
+        BirthDate: Joi.date().required(),
         /**
         * Custom messsage với thằng Joi.ref khá khó tìm trong docs, cách tìm là bắt keyword để tìm những người từng hỏi chung 1 vấn đề,
         * Ví dụ như link bên dưới, tìm ra cách custom bằng any.only trong hàm messages(json object)

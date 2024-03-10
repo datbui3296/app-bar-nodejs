@@ -141,7 +141,7 @@ const getQueryByColumn = async (sql, value) => {
 //const page = 1; // Current page
 //const pageSize = 10; // Number of items per page
 //------------------------------------------------------------------------------------------------
-const searchSortAndPaginateData = async (tableName, searchConditions, sortBy, page, pageSize) => {
+const searchSortAndPaginateData = async (tableName, searchConditions, sortBy , page, pageSize) => {
   try {
     const searchKeys = Object.keys(searchConditions);
     const searchValues = Object.values(searchConditions);
