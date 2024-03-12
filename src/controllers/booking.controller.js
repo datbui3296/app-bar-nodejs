@@ -55,11 +55,25 @@ const vertifyUserBooking = async (req, res) => {
     }
 }
 
+const getBookingByStatus = async (req, res) => {
+    try {
+        const result = await BookingService.getBookingByStatus(req, res);
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({data: result.data })
+
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            message: error.message
+        })
+
+    }
+}
+
 
 module.exports = {
     createUserBooking,
     updateUserBooking,
     deleteUserBooking,
-    vertifyUserBooking
+    vertifyUserBooking,
+    getBookingByStatus
 
 }

@@ -83,6 +83,22 @@ const getAllUserInvoices = async (req, res) => {
 }
 
 
+const updateInvoidPaid = async(req,res) =>{
+    try {
+        const result = await UserInvoiceService.updateInvoidPaid(req, res);
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ code: result.status, message: result.message })
+
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            message: error.message
+        })
+
+    }
+}
+
+
+
+
 
 module.exports = {
     createUserInvoice,
@@ -90,6 +106,7 @@ module.exports = {
     getUserInvoiceId,
     updateUserInvoice,
     getAllUserInvoices,
-    deleteUserInvoice
+    deleteUserInvoice,
+    updateInvoidPaid
 
 }

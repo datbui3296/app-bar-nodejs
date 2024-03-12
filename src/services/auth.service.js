@@ -374,6 +374,7 @@ const update = async (req) => {
 
 const getLevelByLevelId = async(req, res) =>{
   try{
+    const id = parseInt(req.params.id, 10)
     const tableName = 'rank'
     let level = await baseModel.getById(id, tableName)
     return {data: level}

@@ -7,6 +7,7 @@ router.post("/create",  BookkingController.createUserBooking);
 router.patch("/update/:id", BookkingController.updateUserBooking);
 router.delete("/delete/:id",  BookkingController.deleteUserBooking);
 router.post("/vertify/:id", BookkingController.vertifyUserBooking);
+router.get("/bookingStatus/:status", BookkingController.getBookingByStatus);
 
 
 

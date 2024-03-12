@@ -147,7 +147,7 @@ const getLevelByLevelId = async(req, res) =>{
     try {
 
         let result = await AuthService.getLevelByLevelId(req)
-        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ message: result?.message })
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ data: result?.data })
 
     } catch (error) {
         res.status(HttpStatusCode.INTERNAL_SERVER).json({

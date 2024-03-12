@@ -98,10 +98,26 @@ const vertifyUserBooking = async (req) => {
 
 }
 
+const getBookingByStatus = async(req)=>{
+    try {
+        let tableBooking = 'booking'
+        const status = req.params.status
+        let booking = await baseModel.getDataByConditions(tableBooking, { Status: status })
+        return {data: booking}
+
+    } catch (error) {
+        return {
+            status: HttpStatusCode.BAD_REQUEST,
+            mesage: error.message
+        }
+    }
+}
+
 
 module.exports = {
     createUserBooking,
     updateUserBooking,
     deleteUserBooking,
-    vertifyUserBooking
+    vertifyUserBooking,
+    getBookingByStatus
 };
