@@ -123,6 +123,7 @@ const login = async (data) => {
         AccumulatedPoint: user[0].AccumulatedPoint,
         AmountSpent:  user[0].AmountSpent,
         Avatar: user[0].Avatar,
+        Level: user[0].Level,
       }
     };
   } catch (error) {
@@ -270,6 +271,33 @@ const forgotPassword = async (req) => {
   }
 }
 
+const resetPasswordNotMail = async(req) => {
+  try{
+    let tableUserName = 'users'
+    const id = parseInt(req.params.id, 10)
+    let newPassword = req.body.NewPassword
+    const hashedPassword = await bcrypt.hashSync(newPassword, 10);
+    const updatedData = {
+      Password: hashedPassword
+    };
+    const condition = "Id = ?"
+    const conditionParams = [id];
+    var resultUpdatePassword = await baseModel.getUpdateDataByConditions(tableUserName, updatedData, condition, conditionParams);
+    if (resultUpdatePassword.affectedRows > 0) {
+      return {
+        status: HttpStatusCode.OK,
+        message: `Reset password successfuly`
+      }
+    }
+
+  }catch(error){
+    return {
+      status: HttpStatusCode.BAD_REQUEST,
+      message: error.message
+    }
+  }
+}
+
 const resetPassword = async (req) => {
   try {
     let tableUserName = "users"
@@ -344,6 +372,20 @@ const update = async (req) => {
   }
 }
 
+const getLevelByLevelId = async(req, res) =>{
+  try{
+    const tableName = 'rank'
+    let level = await baseModel.getById(id, tableName)
+    return {data: level}
+
+  }catch(error){
+    return {
+      status: HttpStatusCode.BAD_REQUEST,
+      message: error.message
+    }
+  }
+}
+
 
 module.exports = {
   register,
@@ -354,5 +396,7 @@ module.exports = {
   getUserById,
   forgotPassword,
   resetPassword,
-  update
+  update,
+  getLevelByLevelId,
+  resetPasswordNotMail
 };

@@ -5,6 +5,7 @@ const { pick } = require("lodash");
 const env = require("../config/environtment");
 const { HttpStatusCode } = require("../../src/utilities/constants");
 const baseModel = require('../utilities/BaseModel')
+const path = require('path')
 
 const createNotifyTemplate = async (req) => {
     try {
@@ -16,8 +17,25 @@ const createNotifyTemplate = async (req) => {
                 message: `getAllNotifyTemplates is exirst`
             }
         }
-
-        const res = await notifyTemplateModel.createUserNotify(req.body)
+        if (req.files != null) {
+            const file = req.files.file;
+            const fileSize = file?.data?.length;
+            const ext = path.extname(file.name);
+            const fileName = file.md5 + ext;
+            const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+            const allowedType = ['.png', '.jpg', '.jpeg'];
+            if (!allowedType.includes(ext.toLowerCase())) return res.status(HttpStatusCode.INVALID_IMAGE).json({ mesage: "Invalid Images" });
+            if (fileSize > 5000000) return res.status(HttpStatusCode.INVALID_IMAGE).json({ mesage: "Image must be less than 5 MB" });
+            file.mv(`./src/uploads/${fileName}`).then((error, data) => {
+                if (error) return {
+                    status: HttpStatusCode.BAD_REQUEST,
+                    message: `Upload file false`,
+                    data: updateRes
+                }
+            })
+            req.body = { ...req.body, Image: url }
+        }
+        const res = await notifyTemplateModel.createNotifyTemplate(req.body)
         if (res) {
             return {
                 status: HttpStatusCode.OK,
@@ -43,9 +61,28 @@ const updateNotifyTemplate = async (req) => {
                 message: `NotifyTemplate not found`
             }
         }
+        if (req.files != null) {
+            const file = req.files?.file;
+            const fileSize = file?.data?.length;
+            const ext = path.extname(file.name);
+            const fileName = file.md5 + ext;
+            const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+            const allowedType = ['.png', '.jpg', '.jpeg'];
+            if (!allowedType.includes(ext.toLowerCase())) return res.status(HttpStatusCode.INVALID_IMAGE).json({ mesage: "Invalid Images" });
+            if (fileSize > 5000000) return res.status(HttpStatusCode.INVALID_IMAGE).json({ mesage: "Image must be less than 5 MB" });
+            file.mv(`./src/uploads/${fileName}`).then((error, data) => {
+                if (error) return {
+                    status: HttpStatusCode.BAD_REQUEST,
+                    message: `Upload file false`,
+                    data: updateRes
+                }
+            })
+            req.body = { ...req.body, Image: url }
+        }
         let res = await notifyTemplateModel.updateNotifyTemplate(req.body, id)
         if (res.affectedRows > 0) {
             return {
+                status: HttpStatusCode.OK,
                 message: `NotifyTemplate update successfuly`,
             }
         }

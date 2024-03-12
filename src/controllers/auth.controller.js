@@ -132,7 +132,21 @@ const forgotPassword = async (req, res) => {
 const resetPassword = async (req, res) => {
     try {
 
-        let result = await AuthService.resetPassword(req)
+        let result = await AuthService.resetPasswordNotMail(req)
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ code: result.status,message: result?.message })
+
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            errors: error.message
+        })
+    }
+
+}
+
+const getLevelByLevelId = async(req, res) =>{
+    try {
+
+        let result = await AuthService.getLevelByLevelId(req)
         return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ message: result?.message })
 
     } catch (error) {
@@ -153,5 +167,6 @@ module.exports = {
     updateAvatar,
     getUserById,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    getLevelByLevelId
 }
