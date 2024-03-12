@@ -8,10 +8,10 @@ class Database {
 
   async connect() {
     this.pool = mysql.createPool({
-      host: config.DB_HOST || "localhost",
-      user: config.DB_USER || "root",
-      password: config.DB_PASSWORD || "password",
-      database: config.DB_NAME || "mydatabase",
+      host: config.DB_HOST,
+      user: config.DB_USER,
+      password: config.DB_PASSWORD,
+      database: config.DB_NAME,
       waitForConnections: true,
       connectionLimit: 20,
       queueLimit: 0,

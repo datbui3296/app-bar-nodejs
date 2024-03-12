@@ -30,9 +30,10 @@ const createNotifySendPlan = async (req) => {
 const updateNotifySendPlan = async (req) => {
     try {
         const id = parseInt(req.params.id, 10)
-        let notifySendPlans = await userNotifyModel.getNotifySendPlanById(id)
+        let notifySendPlans = await notifySendPlanModel.getNotifySendPlanById(id)
         if (notifySendPlans.length == 0) {
             return {
+                status: HttpStatusCode.BAD_REQUEST,
                 message: `NotifySendPlan not found`
             }
         }
@@ -41,6 +42,7 @@ const updateNotifySendPlan = async (req) => {
         let res = await notifySendPlanModel.updateNotifySendPlan(data, id)
         if (res.affectedRows > 0) {
             return {
+                status: HttpStatusCode.OK,
                 message: `NotifySendPlan update successfuly`,
             }
         }

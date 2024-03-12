@@ -6,7 +6,7 @@ const createNotifySendPlan = async (req, res) => {
     try {
 
         const result = await notifySendPlanService.createNotifySendPlan(req, res);
-        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ message: result?.message })
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ code: result?.status,message: result?.message })
 
     } catch (error) {
         return res.status(HttpStatusCode.INTERNAL_SERVER).json({
@@ -47,7 +47,7 @@ const updateNotifySendPlan = async (req, res) => {
     try {
 
         const result = await notifySendPlanService.updateNotifySendPlan(req, res);
-        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ message: result?.message })
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ code: result?.status,message: result?.message })
     } catch (error) {
         return res.status(HttpStatusCode.INTERNAL_SERVER).json({
             message: error.message

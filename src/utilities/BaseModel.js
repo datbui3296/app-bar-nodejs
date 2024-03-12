@@ -1,3 +1,4 @@
+const { valuesIn } = require("lodash");
 const database = require("../config/mysqldb");
 
 const create = async (data, tableName) => {
@@ -242,6 +243,16 @@ const performDynamicQueryOperator = async (tableName, conditions) => {
   }
 }
 
+const executeQueryINRawasync = async (values, column, tableName) => {
+  try {
+    let sql = `SELECT * FROM ${tableName} WHERE ${column} IN (${values.join(',')})`
+    const result = await database.excuteQuery(sql);
+    return result;
+  } catch (error) {
+    console.error("An error occurred:", error.message);
+  }
+}
+
 
 module.exports = {
   create,
@@ -258,6 +269,7 @@ module.exports = {
   searchSortAndPaginateData,
   getDataByConditions,
   getUpdateDataByConditions,
-  performDynamicQueryOperator
+  performDynamicQueryOperator,
+  executeQueryINRawasync
 
 }
