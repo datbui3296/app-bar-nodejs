@@ -194,12 +194,12 @@ const authMiddleWare = async (req, res, next) => {
     if (user.status == HttpStatusCode.EXPIRED) {
       return res.status(HttpStatusCode.EXPIRED).json({
         status: `TOKEN_EXPIRED`,
-        mesage: `Token expired`
+        mesage: `Token expired`,
       });
     } else if (user.status == HttpStatusCode.UNAUTHORIZED) {
       return res.status(HttpStatusCode.EXPIRED).json({
         status: `ERROR`,
-        mesage: `Token expired`
+        mesage: `Token expired`,
       });
     }
     req.user = user;
@@ -423,17 +423,16 @@ const getUserByToken = async (req) => {
       token,
       "ACCESS_TOKEN_PRIVATE_KEY"
     );
-    if(user.status == HttpStatusCode.INVALID_TOKEN){
+    if (user.status == HttpStatusCode.INVALID_TOKEN) {
       return {
         status: `INVALID_TOKEN`,
-        mesage: `Token invalid`
-      }
-    }
-    else if(user.status == HttpStatusCode.EXPIRED){
+        mesage: `Token invalid`,
+      };
+    } else if (user.status == HttpStatusCode.EXPIRED) {
       return {
         status: `TOKEN_EXPIRED`,
-        mesage: `Token expired`
-      }
+        mesage: `Token expired`,
+      };
     }
     if (verifyToken.status == HttpStatusCode.NOT_FOUND) {
       return {
@@ -451,7 +450,65 @@ const getUserByToken = async (req) => {
         Id: userData[0].Id,
       },
     };
-  } catch (error) {}
+  } catch (error) {
+    return {
+      status: HttpStatusCode.BAD_REQUEST,
+      message: error.message,
+    };
+  }
+};
+
+const createUserAndBooking = async (req) => {
+  try {
+    let data = req.body;
+    const phones = await AuthModel.findOneByPhone(data.Phone);
+    if (phones.length > 0) {
+      return {
+        status: HttpStatusCode.BAD_REQUEST,
+        message: "User is exirt!",
+      };
+    }
+    let bookingTable = "booking";
+    let dataInputUser = {
+      Phone: data.Phone,
+      DisplayName: data.DisplayName,
+      BirthDate: data.BirthDate,
+      Password: bcrypt.hashSync(`123456789!@Ab`, 10),
+    };
+    const createdUser = await AuthModel.register(dataInputUser);
+    let idUserNew = createdUser.id;
+    if (
+      !data.hasOwnProperty("NotifyId") &&
+      !data.hasOwnProperty("SuKienId") &&
+      !data.hasOwnProperty("PreferentialId")
+    )
+      return;
+    let dataBooking = {};
+    if (data.hasOwnProperty("NotifyId")) dataBooking.NotifyId = data.NotifyId;
+    else if (data.hasOwnProperty("SuKienId"))
+      dataBooking.SuKienId = data.SuKienId;
+    else if (data.hasOwnProperty("PreferentialId"))
+      dataBooking.PreferentialId = data.PreferentialId;
+    dataBooking = {
+      ...dataBooking,
+      BookDate: data.BookDate,
+      UserId: idUserNew,
+      CreatedBy: data.CreatedBy,
+      Quantity: data.Quantity
+    };
+    let dataBookingCreate = await baseModel.create(dataBooking, bookingTable);
+    if (createdUser && dataBookingCreate) {
+      return {
+        status: HttpStatusCode.OK,
+        message: `Create new user and booking success`,
+      };
+    }
+  } catch (error) {
+    return {
+      status: HttpStatusCode.BAD_REQUEST,
+      message: error.message,
+    };
+  }
 };
 
 module.exports = {
@@ -467,4 +524,5 @@ module.exports = {
   getLevelByLevelId,
   resetPasswordNotMail,
   getUserByToken,
+  createUserAndBooking,
 };

@@ -96,7 +96,18 @@ const updateInvoidPaid = async(req,res) =>{
     }
 }
 
+const getListInvoicByCashier = async(req,res) =>{
+    try {
+        const result = await UserInvoiceService.getListInvoicByCashier(req, res);
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ data: result.data })
 
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            message: error.message
+        })
+
+    }
+}
 
 
 
@@ -107,6 +118,7 @@ module.exports = {
     updateUserInvoice,
     getAllUserInvoices,
     deleteUserInvoice,
-    updateInvoidPaid
+    updateInvoidPaid,
+    getListInvoicByCashier
 
 }

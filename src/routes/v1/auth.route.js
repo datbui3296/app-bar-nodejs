@@ -15,6 +15,7 @@ router.put("/resetPassword/:id", AuthController.resetPassword);
 router.patch("/update/:id", AuthController.update);
 router.get("/rank/:id", AuthController.getLevelByLevelId);
 router.get("/getUserByToken/:token", AuthController.getUserByToken);
+router.post("/createUserAndBooking", AuthController.createUserAndBooking);
 
 // router.route('/refreshToken')
 //     .get(authMiddleware.isRefreshToken, AuthController.refreshToken)

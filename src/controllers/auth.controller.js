@@ -171,6 +171,20 @@ const getUserByToken = async(req, res) =>{
 
 }
 
+const createUserAndBooking = async(req, res) =>{
+    try {
+
+        let result = await AuthService.createUserAndBooking(req)
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ status: result.status, message: result.message,data: result?.data })
+
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            errors: error.message
+        })
+    }
+
+}
+
 module.exports = {
     register,
     verify,
@@ -183,5 +197,6 @@ module.exports = {
     forgotPassword,
     resetPassword,
     getLevelByLevelId,
-    getUserByToken
+    getUserByToken,
+    createUserAndBooking
 }

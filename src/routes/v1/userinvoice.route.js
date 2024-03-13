@@ -10,6 +10,7 @@ router.delete("/delete/:id",  UserNotifyController.deleteUserInvoice);
 router.get("/UserInvoices/:page/:pageSize", UserNotifyController.getUserInvoices);
 router.get("/UserInvoices", UserNotifyController.getAllUserInvoices);
 router.post("/paidInvoice/:id", UserNotifyController.updateInvoidPaid);
+router.get("/getInvoiceByCashier/:id", UserNotifyController.getListInvoicByCashier);
 
 
 module.exports = router;
