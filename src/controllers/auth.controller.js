@@ -157,6 +157,20 @@ const getLevelByLevelId = async(req, res) =>{
 
 }
 
+const getUserByToken = async(req, res) =>{
+    try {
+
+        let result = await AuthService.getUserByToken(req)
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ data: result?.data })
+
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            errors: error.message
+        })
+    }
+
+}
+
 module.exports = {
     register,
     verify,
@@ -168,5 +182,6 @@ module.exports = {
     getUserById,
     forgotPassword,
     resetPassword,
-    getLevelByLevelId
+    getLevelByLevelId,
+    getUserByToken
 }

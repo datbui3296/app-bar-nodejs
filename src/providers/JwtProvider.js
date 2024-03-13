@@ -45,6 +45,12 @@ const verifyToken = async (token, typeToken = null) => {
         status: HttpStatusCode.EXPIRED,
       };
     }
+    if (err?.message?.includes("invalid token")) {
+      // access token hết hạn => Cần trả về mã lỗi cho FE để gọi API refreshToken
+      return{
+        status: HttpStatusCode.INVALID_TOKEN,
+      };
+    }
     return{
       status: HttpStatusCode.UNAUTHORIZED,
     };

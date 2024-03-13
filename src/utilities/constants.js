@@ -9,7 +9,9 @@ const env  = require("../config/environtment");
     INTERNAL_SERVER: 500,
     EXPIRED: 410,
     REFRESH_EXPIRED: 411,
-    INVALID_IMAGE: 422
+    INVALID_TOKEN: 424,
+    INVALID_IMAGE: 422,
+   
 
 }
 
