@@ -9,6 +9,8 @@ const baseModel = require("../utilities/BaseModel");
 const createTransporter = require("../../src/utilities/transporter");
 const path = require("path");
 const crypto = require("crypto");
+const tableUserpercentage = "userpercentage";
+const getDb = require("../config/mysqldb");
 
 const createTransporterMail = createTransporter();
 
@@ -30,10 +32,18 @@ const register = async (data) => {
       VerifyToken: uuidv4(),
       Phone: data.Phone,
       BirthDate: data.BirthDate,
+      Role: data.Role
     };
-    // transaction mongodb
     const createdUser = await AuthModel.register(newData);
     let getUsers = await AuthModel.findOneById(createdUser.id);
+    if (getUsers[0].Role == `sale`) {
+      let dataUserPercentage = {
+        UserId: createdUser?.id,
+        Ratio: 0.01,
+      };
+      // Create User Percentage
+      let userUpdate = await baseModel.create(dataUserPercentage,tableUserpercentage);
+    }
     let user = getUsers[0];
     let dataRes = {
       Phone: user.Phone,
@@ -46,6 +56,7 @@ const register = async (data) => {
       data: dataRes,
     };
   } catch (error) {
+    await getDb.connect.rollback();
     throw new Error(error);
   }
 };
@@ -494,7 +505,7 @@ const createUserAndBooking = async (req) => {
       BookDate: data.BookDate,
       UserId: idUserNew,
       CreatedBy: data.CreatedBy,
-      Quantity: data.Quantity
+      Quantity: data.Quantity,
     };
     let dataBookingCreate = await baseModel.create(dataBooking, bookingTable);
     if (createdUser && dataBookingCreate) {
@@ -511,6 +522,61 @@ const createUserAndBooking = async (req) => {
   }
 };
 
+const getUserPercentageByUserSale = async(req) => {
+  try{
+    const id = parseInt(req.params.id, 10);
+    let tableUserPercentage = 'userpercentage'
+    let userPercentage = await baseModel.getDataByConditions(tableUserPercentage, { UserId: id})
+    return {data: {TotalPercentage: userPercentage[0].TotalPercentage, AmountTaken: userPercentage[0].AmountTaken}}
+
+  }catch(error){
+    return {
+      status: HttpStatusCode.BAD_REQUEST,
+      message: error.message,
+    }
+  }
+}
+
+const getUserTakePercentageByUserSale = async(req) => {
+  try{
+    const id = parseInt(req.params.id, 10);
+    const takePercentage = req.body.TakePercentage
+    let tableUserPercentage = 'userpercentage'
+    let userPercentage = await baseModel.getDataByConditions(tableUserPercentage, { UserId: id})
+    if(userPercentage[0]?.TotalPercentage == 0){
+      return {
+        status: HttpStatusCode.BAD_REQUEST,
+        message: `User not percentage amount`
+      }
+    }
+    const updatedPercentageUserData = {
+      TotalPercentage: userPercentage[0].TotalPercentage - takePercentage,
+      AmountTaken : userPercentage[0].AmountTaken + takePercentage
+    };
+    const conditionPercentageUser = "UserId = ?";
+    const conditionPercentageUserParams = [id];
+    var resultUpdateUser = await baseModel.getUpdateDataByConditions(
+      tableUserPercentage,
+      updatedPercentageUserData,
+      conditionPercentageUser,
+      conditionPercentageUserParams
+    );
+    if(resultUpdateUser.affectedRows > 0){
+      return {
+        status: HttpStatusCode.OK,
+        message: `User take percentage is successfully`
+      }
+    }
+
+  }catch(error){
+    return {
+      status: HttpStatusCode.BAD_REQUEST,
+      message: error.message,
+    }
+  }
+}
+
+
 module.exports = {
   register,
   verifyToken,
@@ -525,4 +591,6 @@ module.exports = {
   resetPasswordNotMail,
   getUserByToken,
   createUserAndBooking,
+  getUserPercentageByUserSale,
+  getUserTakePercentageByUserSale
 };

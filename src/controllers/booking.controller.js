@@ -68,12 +68,12 @@ const getBookingByStatuAndSale = async (req, res) => {
     }
 }
 
-
 module.exports = {
     createUserBooking,
     updateUserBooking,
     deleteUserBooking,
     vertifyUserBooking,
-    getBookingByStatuAndSale
+    getBookingByStatuAndSale,
+
 
 }

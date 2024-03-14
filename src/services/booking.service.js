@@ -91,6 +91,8 @@ const vertifyUserBooking = async (req) => {
   }
 };
 
+
+
 const getBookingByStatuAndSale = async (req) => {
   try {
     listResData = []
@@ -124,6 +126,7 @@ const getBookingByStatuAndSale = async (req) => {
     };
   }
 };
+
 
 module.exports = {
   createUserBooking,

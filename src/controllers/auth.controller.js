@@ -185,6 +185,30 @@ const createUserAndBooking = async(req, res) =>{
 
 }
 
+const getUserPercentageByUserSale = async(req, res) => {
+    try {
+        let result = await AuthService.getUserPercentageByUserSale(req)
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ data: result?.data })
+
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            errors: error.message
+        })
+    }
+}
+
+const getUserTakePercentageByUserSale = async(req, res) => {
+    try {
+        let result = await AuthService.getUserTakePercentageByUserSale(req)
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ status: result?.status, message: result?.message })
+
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            errors: error.message
+        })
+    }
+}
+
 module.exports = {
     register,
     verify,
@@ -198,5 +222,7 @@ module.exports = {
     resetPassword,
     getLevelByLevelId,
     getUserByToken,
-    createUserAndBooking
+    createUserAndBooking,
+    getUserPercentageByUserSale,
+    getUserTakePercentageByUserSale
 }

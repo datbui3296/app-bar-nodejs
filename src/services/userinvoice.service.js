@@ -4,6 +4,7 @@ const { pick } = require("lodash");
 const env = require("../config/environtment");
 const { HttpStatusCode } = require("../../src/utilities/constants");
 const baseModel = require("../utilities/BaseModel");
+const getDb = require("../config/mysqldb");
 
 const createUserInvoice = async (req) => {
   try {
@@ -116,8 +117,10 @@ const getAllUserInvoices = async (req, res) => {
 
 const updateInvoidPaid = async (req, res) => {
   try {
-    let tableNameInvoice = "userinvoice";
-    let tableNameUser = "users";
+    const tableNameInvoice = "userinvoice";
+    const tableNameUser = "users";
+    const tableBooking = "booking";
+    const tableUserPercentage = "userpercentage";
 
     const id = parseInt(req.params.id, 10);
     let userInvoices = await userInvoiceModel.getUserInvoiceId(id);
@@ -159,13 +162,38 @@ const updateInvoidPaid = async (req, res) => {
       condition,
       conditionParams
     );
+
+    // update User Percentage User Sale
+    let bookings = await baseModel.getById(
+      userInvoices[0]?.BookingId,
+      tableBooking
+    );
+    let userSale = await baseModel.getById(
+      bookings[0]?.CreatedBy,
+      tableNameUser
+    );
+    let userPercentage = await baseModel.getDataByConditions(tableUserPercentage, { UserId: userSale[0]?.Id})
+    const updatedPercentageUserData = {
+      TotalPercentage: userPercentage[0].TotalPercentage + userInvoices[0].Total * userPercentage[0]?.Ratio / 100
+    };
+    const conditionPercentageUser = "UserId = ?";
+    const conditionPercentageUserParams = [userSale[0].Id];
+    var resultUpdateUser = await baseModel.getUpdateDataByConditions(
+      tableUserPercentage,
+      updatedPercentageUserData,
+      conditionPercentageUser,
+      conditionPercentageUserParams
+    );
+
     if (
       resultUpdateUser.affectedRows > 0 &&
-      resultUpdateInvoidce.affectedRows > 0
+      resultUpdateInvoidce.affectedRows > 0 && resultUpdateUser.affectedRows > 0
     ) {
       return { status: HttpStatusCode.OK, message: `Paid successfully` };
     }
+    await getDb.connect.rollback();
   } catch (error) {
+    await getDb.connect.rollback();
     return {
       status: HttpStatusCode.BAD_REQUEST,
       mesage: error.message,
@@ -207,13 +235,11 @@ const getListInvoicByCashier = async (req) => {
           (accumulator, currentValue) => accumulator + currentValue.TotalAmount,
           0
         ),
-        NumberInvoice : listData?.length ?? 0
+        NumberInvoice: listData?.length ?? 0,
       },
     };
-  } catch (error) {}
-}
-
-
+  } catch (error) { }
+};
 
 module.exports = {
   createUserInvoice,
