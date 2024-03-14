@@ -6,7 +6,7 @@ const createUserInvoice = async (req, res) => {
     try {
 
         const result = await UserInvoiceService.createUserInvoice(req, res);
-        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ message: result?.message })
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({ status: result?.status,message: result?.message, data: result?.data })
 
     } catch (error) {
         return res.status(HttpStatusCode.INTERNAL_SERVER).json({

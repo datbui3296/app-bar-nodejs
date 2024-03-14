@@ -69,7 +69,7 @@ const verifyToken = async (data, res) => {
 const login = async (data) => {
   try {
     const user = await AuthModel.findOneByPhone(data.Phone);
-    if (!user) {
+    if (user.length == 0) {
       return { status: 0, message: "User not found" };
       //return { stt: false, msg: 'Incorrect username or password' }
     }
