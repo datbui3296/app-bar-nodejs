@@ -127,6 +127,36 @@ const getBookingByStatuAndSale = async (req) => {
   }
 };
 
+const updateBookingStatusById = async(req) =>{
+  try {
+    const id = parseInt(req.params.id, 10)
+    const status = req.params.status
+    let booking = await bookingModel.getBookingById(id);
+    if(booking.length == 0){
+      return {
+        status: HttpStatusCode.NOT_FOUND,
+        message: `Booking not found`
+      }
+    }
+
+    let dataUpdate = {
+      Status: status
+    }
+    let updateStatus = await bookingModel.updateUserBooking(dataUpdate, booking[0].Id)
+    if(updateStatus.affectedRows > 0){
+      return{
+        status: HttpStatusCode.OK,
+        message: `Status update successfuly`
+      }
+    }
+  } catch (error) {
+    return {
+      status: HttpStatusCode.BAD_REQUEST,
+      mesage: error.message,
+    };
+  }
+}
+
 
 module.exports = {
   createUserBooking,
@@ -134,4 +164,5 @@ module.exports = {
   deleteUserBooking,
   vertifyUserBooking,
   getBookingByStatuAndSale,
+  updateBookingStatusById
 };

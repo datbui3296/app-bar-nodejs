@@ -68,12 +68,26 @@ const getBookingByStatuAndSale = async (req, res) => {
     }
 }
 
+const updateBookingStatusById = async (req, res) => {
+    try {
+        const result = await BookingService.updateBookingStatusById(req, res);
+        return res.status(!result.status ? HttpStatusCode.OK : result.status).json({status: result?.status, message: result?.message })
+
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            message: error.message
+        })
+
+    }
+}
+
 module.exports = {
     createUserBooking,
     updateUserBooking,
     deleteUserBooking,
     vertifyUserBooking,
     getBookingByStatuAndSale,
+    updateBookingStatusById
 
 
 }
